@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <style>
     :root {
@@ -20,28 +21,43 @@
     body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:2rem 1rem;}
     a{color:inherit;text-decoration:none;}
 
-    .top-bar{width:100%;max-width:700px;display:flex;align-items:center;justify-content:space-between;margin-bottom:2.5rem;}
+    .top-bar{width:100%;max-width:520px;display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;}
     .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1rem;}
     .logo-icon{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
     .back-btn{color:var(--text-muted);font-size:0.85rem;border:1px solid var(--border);padding:0.35rem 0.75rem;border-radius:7px;transition:all 0.15s;}
     .back-btn:hover{color:var(--text);border-color:var(--accent);}
 
-    .card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:2.5rem;width:100%;max-width:700px;}
-    .card-header{text-align:center;margin-bottom:2rem;}
-    .card-header .icon{font-size:2.5rem;margin-bottom:0.75rem;}
-    .card-header h1{font-size:1.5rem;font-weight:700;margin-bottom:0.4rem;}
-    .card-header p{color:var(--text-muted);font-size:0.9rem;}
+    .card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:2.25rem;width:100%;max-width:520px;}
 
-    .input-row{display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem;}
-    .input-row input{flex:1;min-width:0;background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:0.85rem 1rem;color:var(--text);font-size:0.95rem;font-family:inherit;outline:none;transition:border-color 0.2s;}
-    .input-row input:focus{border-color:var(--accent);}
-    .btn{background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:0.85rem 1.5rem;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.2s;white-space:nowrap;}
-    .btn:hover{background:var(--accent-dark);}
-    .btn:disabled{opacity:0.6;cursor:not-allowed;}
+    /* TABS */
+    .auth-tabs{display:flex;background:var(--bg-card2);border-radius:10px;padding:4px;margin-bottom:1.75rem;gap:4px;}
+    .tab-btn{flex:1;padding:0.6rem;border:none;background:transparent;color:var(--text-muted);font-size:0.875rem;font-weight:600;border-radius:7px;cursor:pointer;font-family:inherit;transition:all 0.15s;}
+    .tab-btn.active{background:var(--accent);color:#fff;}
 
-    .result-area{margin-top:1.5rem;}
+    /* FORMS */
+    .auth-form{display:flex;flex-direction:column;gap:0.75rem;}
+    .auth-form input{background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:0.85rem 1rem;color:var(--text);font-size:0.95rem;font-family:inherit;outline:none;transition:border-color 0.2s;width:100%;}
+    .auth-form input:focus{border-color:var(--accent);}
+    .auth-form input::placeholder{color:var(--text-dim);}
+    .field-hint{font-size:0.75rem;color:var(--text-dim);margin-top:-0.25rem;}
+    .submit-btn{background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:0.9rem;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.2s;width:100%;margin-top:0.25rem;}
+    .submit-btn:hover{background:var(--accent-dark);}
+    .submit-btn:disabled{opacity:0.6;cursor:not-allowed;}
+    .auth-error{color:var(--danger);font-size:0.82rem;text-align:center;padding:0.5rem;background:rgba(239,68,68,0.08);border-radius:8px;display:none;}
+    .auth-success-msg{color:var(--success);font-size:0.82rem;text-align:center;padding:0.5rem;background:rgba(34,197,94,0.08);border-radius:8px;display:none;}
+
+    /* DASHBOARD */
+    #dashboard{display:none;}
+    .dash-header{background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;}
+    .user-info{display:flex;flex-direction:column;gap:2px;}
+    .user-name{font-weight:700;font-size:0.95rem;}
+    .user-meta{font-size:0.8rem;color:var(--text-muted);}
+    .logout-btn{background:transparent;border:1px solid var(--border);color:var(--text-muted);border-radius:8px;padding:0.35rem 0.75rem;font-size:0.82rem;cursor:pointer;font-family:inherit;transition:all 0.15s;white-space:nowrap;}
+    .logout-btn:hover{border-color:var(--danger);color:var(--danger);}
+
     .empty{text-align:center;padding:2.5rem;color:var(--text-muted);}
     .empty .e-icon{font-size:2.5rem;margin-bottom:0.75rem;}
+    .loading{text-align:center;color:var(--text-muted);font-size:0.9rem;padding:2rem;}
 
     .talep-kart{background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1rem;}
     .talep-kart:last-child{margin-bottom:0;}
@@ -60,14 +76,9 @@
     .teklif-box .fiyat{font-size:1.4rem;font-weight:800;color:var(--success);}
     .teklif-box .teslim{font-size:0.82rem;color:var(--text-muted);margin-top:0.25rem;}
     .teklif-box .not{font-size:0.82rem;color:var(--text-muted);margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--border);}
-
     .divider{height:1px;background:var(--border);margin:1rem 0;}
 
-    @media(max-width:480px){
-      .card{padding:1.5rem 1rem;}
-      .input-row{flex-direction:column;}
-      .btn{width:100%;}
-    }
+    @media(max-width:480px){.card{padding:1.5rem 1rem;}}
   </style>
 </head>
 <body>
@@ -81,18 +92,60 @@
 </div>
 
 <div class="card">
-  <div class="card-header">
-    <div class="icon">👤</div>
-    <h1>Müşteri Paneli</h1>
-    <p>E-posta adresinizi girerek taleplerinizin durumunu ve size gönderilen teklifleri görüntüleyin.</p>
+
+  <!-- AUTH SECTION -->
+  <div id="authSection">
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <div style="font-size:2.2rem;margin-bottom:0.5rem;">👤</div>
+      <h1 style="font-size:1.4rem;font-weight:700;margin-bottom:0.25rem;">Müşteri Paneli</h1>
+      <p style="color:var(--text-muted);font-size:0.875rem;">Taleplerinizi takip edin, teklifleri görüntüleyin.</p>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="tab-btn active" id="tabLogin" onclick="switchTab('login')">Giriş Yap</button>
+      <button class="tab-btn" id="tabRegister" onclick="switchTab('register')">Kayıt Ol</button>
+    </div>
+
+    <!-- GİRİŞ FORMU -->
+    <div id="loginForm">
+      <div class="auth-form">
+        <input type="email" id="loginEmail" placeholder="E-posta adresiniz" autocomplete="email">
+        <input type="password" id="loginPassword" placeholder="Şifreniz" autocomplete="current-password" onkeydown="if(event.key==='Enter')loginMusteri()">
+        <div class="auth-error" id="loginError"></div>
+        <button class="submit-btn" id="loginBtn" onclick="loginMusteri()">🔓 Giriş Yap</button>
+      </div>
+    </div>
+
+    <!-- KAYIT FORMU -->
+    <div id="registerForm" style="display:none;">
+      <div class="auth-form">
+        <input type="text" id="regAd" placeholder="Ad Soyad *" autocomplete="name">
+        <input type="email" id="regEmail" placeholder="E-posta adresiniz *" autocomplete="email">
+        <input type="tel" id="regTelefon" placeholder="Telefon numaranız * (05xx xxx xx xx)" autocomplete="tel">
+        <p class="field-hint">📞 Sizinle iletişime geçebilmemiz için telefon numaranız gereklidir.</p>
+        <input type="password" id="regPassword" placeholder="Şifre (en az 6 karakter) *" autocomplete="new-password">
+        <input type="password" id="regPassword2" placeholder="Şifreyi tekrar girin *" autocomplete="new-password" onkeydown="if(event.key==='Enter')registerMusteri()">
+        <div class="auth-error" id="registerError"></div>
+        <div class="auth-success-msg" id="registerSuccess"></div>
+        <button class="submit-btn" id="registerBtn" onclick="registerMusteri()">✅ Kayıt Ol</button>
+      </div>
+    </div>
   </div>
 
-  <div class="input-row">
-    <input type="email" id="musteriEmail" placeholder="Teklif formunda kullandığınız e-posta" autocomplete="email" onkeydown="if(event.key==='Enter')sorgulaMusteri()">
-    <button class="btn" id="sorguBtn" onclick="sorgulaMusteri()">🔍 Sorgula</button>
+  <!-- DASHBOARD SECTION -->
+  <div id="dashboard">
+    <div class="dash-header">
+      <div class="user-info">
+        <div class="user-name" id="userName">—</div>
+        <div class="user-meta" id="userMeta">—</div>
+      </div>
+      <button class="logout-btn" onclick="logoutMusteri()">Çıkış Yap</button>
+    </div>
+    <div id="resultArea">
+      <div class="loading">Talepler yükleniyor...</div>
+    </div>
   </div>
 
-  <div class="result-area" id="resultArea"></div>
 </div>
 
 <script src="js/firebase-config.js"></script>
@@ -112,63 +165,168 @@ function formatDate(ts) {
   return d.toLocaleDateString('tr-TR', { day:'2-digit', month:'2-digit', year:'numeric' });
 }
 
-async function sorgulaMusteri() {
-  const email = document.getElementById('musteriEmail').value.trim();
-  const area = document.getElementById('resultArea');
-  const btn = document.getElementById('sorguBtn');
-  if (!email) { area.innerHTML = '<p style="color:var(--danger);font-size:0.9rem;text-align:center;">Lütfen e-posta adresinizi girin.</p>'; return; }
+function switchTab(tab) {
+  const isLogin = tab === 'login';
+  document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = isLogin ? 'none' : 'block';
+  document.getElementById('tabLogin').classList.toggle('active', isLogin);
+  document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+  document.getElementById('loginError').style.display = 'none';
+  document.getElementById('registerError').style.display = 'none';
+  document.getElementById('registerSuccess').style.display = 'none';
+}
+
+// Auth state
+auth.onAuthStateChanged(async user => {
+  if (user) {
+    document.getElementById('authSection').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    // Profil bilgilerini çek
+    try {
+      const profil = await db.collection('musteriler').doc(user.uid).get();
+      const d = profil.data() || {};
+      document.getElementById('userName').textContent = d.ad || user.email;
+      document.getElementById('userMeta').textContent = [user.email, d.telefon].filter(Boolean).join(' · ');
+    } catch {
+      document.getElementById('userName').textContent = user.email;
+      document.getElementById('userMeta').textContent = user.email;
+    }
+    loadTalepler(user.email);
+  } else {
+    document.getElementById('authSection').style.display = 'block';
+    document.getElementById('dashboard').style.display = 'none';
+  }
+});
+
+// GİRİŞ
+async function loginMusteri() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const btn = document.getElementById('loginBtn');
+  const errEl = document.getElementById('loginError');
+  errEl.style.display = 'none';
+
+  if (!email || !password) {
+    errEl.textContent = 'E-posta ve şifrenizi girin.';
+    errEl.style.display = 'block';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = 'Giriş yapılıyor...';
+  try {
+    await auth.signInWithEmailAndPassword(email, password);
+  } catch (e) {
+    const msgs = {
+      'auth/user-not-found': 'Bu e-posta ile kayıtlı hesap bulunamadı. Kayıt olun.',
+      'auth/wrong-password': 'Şifre hatalı.',
+      'auth/invalid-credential': 'E-posta veya şifre hatalı.',
+      'auth/invalid-email': 'Geçersiz e-posta adresi.',
+      'auth/too-many-requests': 'Çok fazla deneme. Lütfen bekleyin.',
+    };
+    errEl.textContent = msgs[e.code] || 'Giriş başarısız.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = '🔓 Giriş Yap';
+  }
+}
+
+// KAYIT
+async function registerMusteri() {
+  const ad = document.getElementById('regAd').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const telefon = document.getElementById('regTelefon').value.trim();
+  const pass = document.getElementById('regPassword').value;
+  const pass2 = document.getElementById('regPassword2').value;
+  const btn = document.getElementById('registerBtn');
+  const errEl = document.getElementById('registerError');
+  const sucEl = document.getElementById('registerSuccess');
+  errEl.style.display = 'none';
+  sucEl.style.display = 'none';
+
+  if (!ad) { errEl.textContent = 'Ad soyad zorunludur.'; errEl.style.display = 'block'; return; }
+  if (!email) { errEl.textContent = 'E-posta zorunludur.'; errEl.style.display = 'block'; return; }
+  if (!telefon) { errEl.textContent = 'Telefon numarası zorunludur.'; errEl.style.display = 'block'; return; }
+  if (pass.length < 6) { errEl.textContent = 'Şifre en az 6 karakter olmalıdır.'; errEl.style.display = 'block'; return; }
+  if (pass !== pass2) { errEl.textContent = 'Şifreler eşleşmiyor.'; errEl.style.display = 'block'; return; }
 
   btn.disabled = true;
-  btn.textContent = 'Aranıyor...';
-  area.innerHTML = '<p style="color:var(--text-muted);font-size:0.9rem;text-align:center;">Talepler yükleniyor...</p>';
+  btn.textContent = 'Kayıt yapılıyor...';
 
+  try {
+    const cred = await auth.createUserWithEmailAndPassword(email, pass);
+    // Profili Firestore'a kaydet
+    await db.collection('musteriler').doc(cred.user.uid).set({
+      ad,
+      email,
+      telefon,
+      olusturma: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    // onAuthStateChanged dashboard'u açar
+  } catch (e) {
+    const msgs = {
+      'auth/email-already-in-use': 'Bu e-posta zaten kayıtlı. Giriş yapın.',
+      'auth/invalid-email': 'Geçersiz e-posta adresi.',
+      'auth/weak-password': 'Şifre çok zayıf.',
+    };
+    errEl.textContent = msgs[e.code] || 'Kayıt başarısız. Tekrar deneyin.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = '✅ Kayıt Ol';
+  }
+}
+
+// ÇIKIŞ
+async function logoutMusteri() {
+  await auth.signOut();
+}
+
+// TALEPLERİ YÜKLE
+async function loadTalepler(email) {
+  const area = document.getElementById('resultArea');
+  area.innerHTML = '<div class="loading">Talepler yükleniyor...</div>';
   try {
     const snap = await db.collection('projeler').where('musteri_email', '==', email).orderBy('olusturma', 'desc').get();
 
     if (snap.empty) {
-      area.innerHTML = `<div class="empty"><div class="e-icon">📭</div><p>Bu e-posta adresiyle kayıtlı talep bulunamadı.</p><p style="font-size:0.82rem;margin-top:0.5rem;color:var(--text-dim);">Teklif formunu doldurup gönderdiniz mi?</p></div>`;
-    } else {
-      let html = `<div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;">${snap.size} talep bulundu:</div>`;
-
-      for (const doc of snap.docs) {
-        const p = doc.data();
-        // Teklifleri çek
-        const teklifSnap = await db.collection('projeler').doc(doc.id).collection('teklifler').orderBy('olusturma', 'desc').get();
-        const teklifler = teklifSnap.docs.map(d => d.data());
-
-        html += `<div class="talep-kart">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
-            <div class="baslik">${p.baslik || 'Başlıksız Talep'}</div>
-            ${durumBadge[p.durum] || `<span class="badge">${p.durum}</span>`}
-          </div>
-          <div class="talep-meta">
-            <span>📅 ${formatDate(p.olusturma)}</span>
-            ${p.kategori ? `<span>🏷️ ${p.kategori}</span>` : ''}
-            ${p.musteri_sehir ? `<span>📍 ${p.musteri_sehir}</span>` : ''}
-          </div>
-          ${p.aciklama ? `<div style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">${p.aciklama}</div>` : ''}
-          ${teklifler.length ? `
-            <div class="divider"></div>
-            <div style="font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--accent);margin-bottom:0.5rem;">📋 Gönderilen Teklif${teklifler.length > 1 ? 'ler' : ''}</div>
-            ${teklifler.map(t => `
-              <div class="teklif-box">
-                <div class="label">Fiyat Teklifi</div>
-                <div class="fiyat">${Number(t.fiyat).toLocaleString('tr-TR')} ${t.para_birimi || 'TRY'}</div>
-                ${t.teslim_gun ? `<div class="teslim">⏱️ Tahmini teslim: ${t.teslim_gun} iş günü</div>` : ''}
-                ${t.notlar ? `<div class="not">💬 ${t.notlar}</div>` : ''}
-              </div>`).join('')}
-          ` : p.durum === 'yeni' || p.durum === 'inceleniyor' ? `<div style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-muted);">⏳ Teklifiniz hazırlanıyor, 48 saat içinde bilgilendirileceksiniz.</div>` : ''}
-        </div>`;
-      }
-      area.innerHTML = html;
+      area.innerHTML = `<div class="empty"><div class="e-icon">📭</div><p>Henüz gönderilmiş talebiniz yok.</p><p style="font-size:0.82rem;margin-top:0.5rem;color:var(--text-dim);"><a href="index.html#teklif-formu" style="color:var(--accent);">Teklif formu</a>nu doldurarak talep oluşturabilirsiniz.</p></div>`;
+      return;
     }
+
+    let html = `<div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;">${snap.size} talep bulundu:</div>`;
+    for (const doc of snap.docs) {
+      const p = doc.data();
+      const teklifSnap = await db.collection('projeler').doc(doc.id).collection('teklifler').orderBy('olusturma', 'desc').get();
+      const teklifler = teklifSnap.docs.map(d => d.data());
+
+      html += `<div class="talep-kart">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+          <div class="baslik">${p.baslik || 'Başlıksız Talep'}</div>
+          ${durumBadge[p.durum] || `<span class="badge">${p.durum}</span>`}
+        </div>
+        <div class="talep-meta">
+          <span>📅 ${formatDate(p.olusturma)}</span>
+          ${p.kategori ? `<span>🏷️ ${p.kategori}</span>` : ''}
+          ${p.musteri_sehir ? `<span>📍 ${p.musteri_sehir}</span>` : ''}
+        </div>
+        ${p.aciklama ? `<div style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">${p.aciklama}</div>` : ''}
+        ${teklifler.length ? `
+          <div class="divider"></div>
+          <div style="font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--accent);margin-bottom:0.5rem;">📋 Gönderilen Teklif${teklifler.length > 1 ? 'ler' : ''}</div>
+          ${teklifler.map(t => `
+            <div class="teklif-box">
+              <div class="label">Fiyat Teklifi</div>
+              <div class="fiyat">${Number(t.fiyat).toLocaleString('tr-TR')} ${t.para_birimi || 'TRY'}</div>
+              ${t.teslim_gun ? `<div class="teslim">⏱️ Tahmini teslim: ${t.teslim_gun} iş günü</div>` : ''}
+              ${t.notlar ? `<div class="not">💬 ${t.notlar}</div>` : ''}
+            </div>`).join('')}
+        ` : p.durum === 'yeni' || p.durum === 'inceleniyor' ? `<div style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-muted);">⏳ Teklifiniz hazırlanıyor, 48 saat içinde bilgilendirileceksiniz.</div>` : ''}
+      </div>`;
+    }
+    area.innerHTML = html;
   } catch (e) {
     console.error(e);
-    area.innerHTML = '<p style="color:var(--danger);font-size:0.9rem;text-align:center;">Sorgulama başarısız. Lütfen tekrar deneyin.</p>';
+    area.innerHTML = '<p style="color:var(--danger);font-size:0.9rem;text-align:center;">Talepler yüklenemedi. Lütfen tekrar deneyin.</p>';
   }
-
-  btn.disabled = false;
-  btn.textContent = '🔍 Sorgula';
 }
 </script>
 </body>

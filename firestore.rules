@@ -1,14 +1,23 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Herkes proje talebi oluşturabilir, sadece admin okuyabilir/güncelleyebilir
+
+    // Projeler (teklif talepleri)
     match /projeler/{projeId} {
-      allow create: if true;
-      allow read, update, delete: if request.auth != null;
+      allow create: if true; // herkes form gönderebilir
+      allow read: if request.auth != null;
+      allow update, delete: if request.auth != null;
 
       match /teklifler/{teklifId} {
-        allow read, write: if request.auth != null;
+        allow read: if request.auth != null;
+        allow write: if request.auth != null;
       }
+    }
+
+    // Müşteri profilleri (kayıt olan müşteriler)
+    match /musteriler/{uid} {
+      allow create, update: if request.auth != null && request.auth.uid == uid;
+      allow read: if request.auth != null; // admin de okuyabilir
     }
   }
 }

@@ -10,7 +10,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
   <style>
     :root {
       --bg:#0a0c10;--bg-card:#12161f;--bg-card2:#1a1f2e;--border:#252b3b;
@@ -188,6 +187,8 @@
       <div class="nav-item" onclick="showPage('projeler','yeni');closeSidebar()"><span class="icon">🆕</span> Yeni Talepler</div>
       <div class="nav-item" onclick="showPage('projeler','teklif_verildi');closeSidebar()"><span class="icon">💰</span> Teklif Verilenler</div>
       <div class="nav-item" onclick="showPage('projeler','tamamlandi');closeSidebar()"><span class="icon">✅</span> Tamamlananlar</div>
+      <div class="nav-section-label" style="margin-top:1rem;">Müşteriler</div>
+      <div class="nav-item" onclick="showPage('musteriler');closeSidebar()" id="nav-musteriler"><span class="icon">👥</span> Kayıtlı Müşteriler</div>
     </nav>
     <div class="sidebar-footer">
       <button class="logout-btn" onclick="logout()"><span>🚪</span> Çıkış Yap</button>
@@ -226,6 +227,15 @@
             </div>
           </div>
           <div id="dashboardTableBody"></div>
+        </div>
+      </div>
+      <!-- MÜŞTERİLER -->
+      <div id="page-musteriler" style="display:none;">
+        <div class="table-container">
+          <div class="table-header">
+            <h2>Kayıtlı Müşteriler</h2>
+          </div>
+          <div id="musterilerBody"></div>
         </div>
       </div>
       <!-- PROJELER -->

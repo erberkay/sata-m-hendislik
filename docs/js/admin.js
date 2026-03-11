@@ -53,9 +53,22 @@ function showPage(page, filter) {
   document.getElementById(`page-${page}`).style.display = 'block';
   const navEl = document.getElementById(`nav-${page}`);
   if (navEl) navEl.classList.add('active');
-  document.getElementById('pageTitle').textContent = page === 'dashboard' ? 'Dashboard' : 'Talepler';
-  if (page === 'projeler') { currentFilter = filter || ''; loadProjeler(currentFilter); }
-  else loadDashboard();
+  const titles = { dashboard: 'Dashboard', projeler: 'Talepler', musteriler: 'Kayıtlı Müşteriler' };
+  document.getElementById('pageTitle').textContent = titles[page] || page;
+  if (page === 'projeler') {
+    currentFilter = filter || '';
+    loadProjeler(currentFilter);
+    document.querySelectorAll('#filterBtns .filter-btn').forEach(b => b.classList.remove('active'));
+    const activeBtn = [...document.querySelectorAll('#filterBtns .filter-btn')].find(b => {
+      const onclick = b.getAttribute('onclick') || '';
+      return onclick.includes(`'${currentFilter}'`) || (currentFilter === '' && onclick.includes("''"));
+    });
+    if (activeBtn) activeBtn.classList.add('active');
+  } else if (page === 'musteriler') {
+    loadMusteriler();
+  } else {
+    loadDashboard();
+  }
 }
 
 function refreshData() {
@@ -107,6 +120,38 @@ function dashFilter(event, filter) {
 }
 
 function loadDashboard() { updateDashboardUI(); }
+
+// ===== MÜŞTERİLER =====
+async function loadMusteriler() {
+  const body = document.getElementById('musterilerBody');
+  body.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--text-muted);">Yükleniyor...</div>';
+  try {
+    const snap = await db.collection('musteriler').orderBy('olusturma', 'desc').get();
+    if (snap.empty) {
+      body.innerHTML = '<div class="empty-state"><div class="icon">👥</div><p>Henüz kayıtlı müşteri yok</p></div>';
+      return;
+    }
+    body.innerHTML = `
+      <table>
+        <thead><tr><th>#</th><th>Ad Soyad</th><th>E-posta</th><th>Telefon</th><th>Kayıt Tarihi</th></tr></thead>
+        <tbody>
+          ${snap.docs.map((d, i) => {
+            const m = d.data();
+            return `<tr>
+              <td style="color:var(--text-muted);font-size:0.8rem;">${i + 1}</td>
+              <td><div class="project-title">${esc(m.ad || '—')}</div></td>
+              <td><div class="project-sub"><a href="mailto:${m.email}" style="color:var(--accent);">${esc(m.email)}</a></div></td>
+              <td><div class="project-title"><a href="tel:${m.telefon}" style="color:var(--success);">${esc(m.telefon || '—')}</a></div></td>
+              <td style="color:var(--text-muted);font-size:0.8rem;">${formatDate(m.olusturma)}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>`;
+  } catch (e) {
+    console.error(e);
+    body.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--danger);">Yüklenemedi.</div>';
+  }
+}
 
 // ===== PROJELER =====
 function loadProjeler(filter) {
@@ -268,7 +313,7 @@ async function teklifGonder(projeId) {
     console.error(e);
     toast('error', 'Teklif gönderilemedi');
     btn.disabled = false;
-    btn.textContent = '💰 Teklifi Kaydet';
+    btn.innerHTML = '💰 Teklifi Kaydet';
   }
 }
 

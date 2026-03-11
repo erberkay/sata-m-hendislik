@@ -92,6 +92,25 @@ input, textarea, select, button { font-family: inherit; }
 }
 .nav-cta:hover { background: var(--accent-dark) !important; }
 
+/* Nav utils — Müşteri & Admin butonları, her zaman görünür */
+.nav-utils {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+.nav-util-btn {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.nav-util-btn:hover { color: var(--text); border-color: var(--accent); }
+
 /* Hamburger */
 .hamburger {
   display: none;
@@ -836,15 +855,17 @@ footer {
 @media (max-width: 768px) {
   /* Navbar */
   .hamburger { display: flex; }
+  /* Müşteri & Admin butonlarını mobilde küçült */
+  .nav-util-btn { font-size: 0.72rem; padding: 0.28rem 0.5rem; }
   .nav-links {
     display: none;
     position: fixed;
-    top: 70px; left: 0; right: 0; bottom: 0;
+    top: 70px; left: 0; right: 0; bottom: 80px;
     background: var(--bg-card);
     border-top: 1px solid var(--border);
     flex-direction: column;
-    padding: 2rem 1.5rem;
-    gap: 0.5rem;
+    padding: 1.5rem 1.25rem;
+    gap: 0.4rem;
     overflow-y: auto;
     z-index: 99;
   }
@@ -916,9 +937,6 @@ footer {
 
   /* WhatsApp FAB - mobile CTA'nın üstüne al */
   .whatsapp-fab { bottom: 5.5rem; right: 1rem; width: 48px; height: 48px; }
-
-  /* Admin linki navbar'da gizle, sadece hamburger menüde gözüksün */
-  .nav-links li:last-child a { font-size: 0.9rem !important; }
 
   /* Talep sorgula section */
   #talep-sorgula .container > div:first-of-type { flex-direction: column; }
