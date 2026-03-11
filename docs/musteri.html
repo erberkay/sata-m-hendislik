@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Müşteri Paneli — Sata Mühendislik</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <style>
+    :root {
+      --bg:#0a0c10;--bg-card:#12161f;--bg-card2:#1a1f2e;--border:#252b3b;
+      --accent:#f97316;--accent-dark:#c2410c;--accent-glow:rgba(249,115,22,0.12);
+      --text:#e8ecf4;--text-muted:#7a8299;--text-dim:#4a5268;
+      --success:#22c55e;--danger:#ef4444;--warning:#eab308;--info:#3b82f6;
+      --radius:12px;--shadow:0 4px 24px rgba(0,0,0,0.4);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:2rem 1rem;}
+    a{color:inherit;text-decoration:none;}
+
+    .top-bar{width:100%;max-width:700px;display:flex;align-items:center;justify-content:space-between;margin-bottom:2.5rem;}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1rem;}
+    .logo-icon{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+    .back-btn{color:var(--text-muted);font-size:0.85rem;border:1px solid var(--border);padding:0.35rem 0.75rem;border-radius:7px;transition:all 0.15s;}
+    .back-btn:hover{color:var(--text);border-color:var(--accent);}
+
+    .card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:2.5rem;width:100%;max-width:700px;}
+    .card-header{text-align:center;margin-bottom:2rem;}
+    .card-header .icon{font-size:2.5rem;margin-bottom:0.75rem;}
+    .card-header h1{font-size:1.5rem;font-weight:700;margin-bottom:0.4rem;}
+    .card-header p{color:var(--text-muted);font-size:0.9rem;}
+
+    .input-row{display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem;}
+    .input-row input{flex:1;min-width:0;background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:0.85rem 1rem;color:var(--text);font-size:0.95rem;font-family:inherit;outline:none;transition:border-color 0.2s;}
+    .input-row input:focus{border-color:var(--accent);}
+    .btn{background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:0.85rem 1.5rem;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.2s;white-space:nowrap;}
+    .btn:hover{background:var(--accent-dark);}
+    .btn:disabled{opacity:0.6;cursor:not-allowed;}
+
+    .result-area{margin-top:1.5rem;}
+    .empty{text-align:center;padding:2.5rem;color:var(--text-muted);}
+    .empty .e-icon{font-size:2.5rem;margin-bottom:0.75rem;}
+
+    .talep-kart{background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1rem;}
+    .talep-kart:last-child{margin-bottom:0;}
+    .talep-kart .baslik{font-size:1rem;font-weight:700;margin-bottom:0.5rem;}
+    .talep-meta{display:flex;flex-wrap:wrap;gap:0.5rem 1.25rem;font-size:0.8rem;color:var(--text-muted);margin-bottom:0.75rem;}
+    .badge{display:inline-flex;align-items:center;gap:4px;padding:0.2rem 0.6rem;border-radius:100px;font-size:0.72rem;font-weight:700;}
+    .badge.yeni{background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.25);}
+    .badge.inceleniyor{background:rgba(234,179,8,0.15);color:#fbbf24;border:1px solid rgba(234,179,8,0.25);}
+    .badge.teklif_verildi{background:rgba(249,115,22,0.15);color:#fb923c;border:1px solid rgba(249,115,22,0.25);}
+    .badge.kabul_edildi{background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.25);}
+    .badge.reddedildi{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.25);}
+    .badge.tamamlandi{background:rgba(139,92,246,0.15);color:#a78bfa;border:1px solid rgba(139,92,246,0.25);}
+
+    .teklif-box{background:var(--bg);border:1px solid rgba(249,115,22,0.25);border-radius:10px;padding:1rem 1.25rem;margin-top:0.75rem;}
+    .teklif-box .label{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:600;margin-bottom:0.4rem;}
+    .teklif-box .fiyat{font-size:1.4rem;font-weight:800;color:var(--success);}
+    .teklif-box .teslim{font-size:0.82rem;color:var(--text-muted);margin-top:0.25rem;}
+    .teklif-box .not{font-size:0.82rem;color:var(--text-muted);margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--border);}
+
+    .divider{height:1px;background:var(--border);margin:1rem 0;}
+
+    @media(max-width:480px){
+      .card{padding:1.5rem 1rem;}
+      .input-row{flex-direction:column;}
+      .btn{width:100%;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="index.html" class="logo">
+    <div class="logo-icon">⚙</div>
+    <div>Sata <span style="color:var(--accent);">Mühendislik</span></div>
+  </a>
+  <a href="index.html" class="back-btn">← Ana Sayfa</a>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <div class="icon">👤</div>
+    <h1>Müşteri Paneli</h1>
+    <p>E-posta adresinizi girerek taleplerinizin durumunu ve size gönderilen teklifleri görüntüleyin.</p>
+  </div>
+
+  <div class="input-row">
+    <input type="email" id="musteriEmail" placeholder="Teklif formunda kullandığınız e-posta" autocomplete="email" onkeydown="if(event.key==='Enter')sorgulaMusteri()">
+    <button class="btn" id="sorguBtn" onclick="sorgulaMusteri()">🔍 Sorgula</button>
+  </div>
+
+  <div class="result-area" id="resultArea"></div>
+</div>
+
+<script src="js/firebase-config.js"></script>
+<script>
+const durumBadge = {
+  yeni: '<span class="badge yeni">🆕 Yeni</span>',
+  inceleniyor: '<span class="badge inceleniyor">🔍 İnceleniyor</span>',
+  teklif_verildi: '<span class="badge teklif_verildi">💰 Teklif Verildi</span>',
+  kabul_edildi: '<span class="badge kabul_edildi">✅ Kabul Edildi</span>',
+  reddedildi: '<span class="badge reddedildi">❌ Reddedildi</span>',
+  tamamlandi: '<span class="badge tamamlandi">🏁 Tamamlandı</span>'
+};
+
+function formatDate(ts) {
+  if (!ts) return '—';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('tr-TR', { day:'2-digit', month:'2-digit', year:'numeric' });
+}
+
+async function sorgulaMusteri() {
+  const email = document.getElementById('musteriEmail').value.trim();
+  const area = document.getElementById('resultArea');
+  const btn = document.getElementById('sorguBtn');
+  if (!email) { area.innerHTML = '<p style="color:var(--danger);font-size:0.9rem;text-align:center;">Lütfen e-posta adresinizi girin.</p>'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Aranıyor...';
+  area.innerHTML = '<p style="color:var(--text-muted);font-size:0.9rem;text-align:center;">Talepler yükleniyor...</p>';
+
+  try {
+    const snap = await db.collection('projeler').where('musteri_email', '==', email).orderBy('olusturma', 'desc').get();
+
+    if (snap.empty) {
+      area.innerHTML = `<div class="empty"><div class="e-icon">📭</div><p>Bu e-posta adresiyle kayıtlı talep bulunamadı.</p><p style="font-size:0.82rem;margin-top:0.5rem;color:var(--text-dim);">Teklif formunu doldurup gönderdiniz mi?</p></div>`;
+    } else {
+      let html = `<div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;">${snap.size} talep bulundu:</div>`;
+
+      for (const doc of snap.docs) {
+        const p = doc.data();
+        // Teklifleri çek
+        const teklifSnap = await db.collection('projeler').doc(doc.id).collection('teklifler').orderBy('olusturma', 'desc').get();
+        const teklifler = teklifSnap.docs.map(d => d.data());
+
+        html += `<div class="talep-kart">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
+            <div class="baslik">${p.baslik || 'Başlıksız Talep'}</div>
+            ${durumBadge[p.durum] || `<span class="badge">${p.durum}</span>`}
+          </div>
+          <div class="talep-meta">
+            <span>📅 ${formatDate(p.olusturma)}</span>
+            ${p.kategori ? `<span>🏷️ ${p.kategori}</span>` : ''}
+            ${p.musteri_sehir ? `<span>📍 ${p.musteri_sehir}</span>` : ''}
+          </div>
+          ${p.aciklama ? `<div style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">${p.aciklama}</div>` : ''}
+          ${teklifler.length ? `
+            <div class="divider"></div>
+            <div style="font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--accent);margin-bottom:0.5rem;">📋 Gönderilen Teklif${teklifler.length > 1 ? 'ler' : ''}</div>
+            ${teklifler.map(t => `
+              <div class="teklif-box">
+                <div class="label">Fiyat Teklifi</div>
+                <div class="fiyat">${Number(t.fiyat).toLocaleString('tr-TR')} ${t.para_birimi || 'TRY'}</div>
+                ${t.teslim_gun ? `<div class="teslim">⏱️ Tahmini teslim: ${t.teslim_gun} iş günü</div>` : ''}
+                ${t.notlar ? `<div class="not">💬 ${t.notlar}</div>` : ''}
+              </div>`).join('')}
+          ` : p.durum === 'yeni' || p.durum === 'inceleniyor' ? `<div style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-muted);">⏳ Teklifiniz hazırlanıyor, 48 saat içinde bilgilendirileceksiniz.</div>` : ''}
+        </div>`;
+      }
+      area.innerHTML = html;
+    }
+  } catch (e) {
+    console.error(e);
+    area.innerHTML = '<p style="color:var(--danger);font-size:0.9rem;text-align:center;">Sorgulama başarısız. Lütfen tekrar deneyin.</p>';
+  }
+
+  btn.disabled = false;
+  btn.textContent = '🔍 Sorgula';
+}
+</script>
+</body>
+</html>

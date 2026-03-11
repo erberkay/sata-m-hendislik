@@ -69,7 +69,6 @@
     <li><a href="#hizmetler">Hizmetler</a></li>
     <li><a href="#nasil-calisir">Nasıl Çalışır</a></li>
     <li><a href="#iletisim">İletişim</a></li>
-    <li><a href="#talep-sorgula">Takip</a></li>
     <li><a href="#teklif-formu" class="nav-cta">Teklif Al</a></li>
     <li><a href="admin.html" style="color:var(--text-muted);font-size:0.82rem;">🔐 Admin</a></li>
   </ul>
@@ -336,22 +335,6 @@
   </div>
 </section>
 
-<!-- MÜŞTERİ TALEBİ SORGULA -->
-<section id="talep-sorgula" style="background:var(--bg-card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
-  <div class="container" style="max-width:600px;">
-    <div class="section-header" style="text-align:center;margin-bottom:2rem;">
-      <div class="section-label">Takip</div>
-      <h2 class="section-title">Talebinizi Sorgulayın</h2>
-      <p class="section-sub" style="margin:0 auto;">Form gönderirken kullandığınız e-posta adresini girin, talebinizin güncel durumunu görün.</p>
-    </div>
-    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;" id="sorguForm">
-      <input type="email" id="sorguEmail" placeholder="E-posta adresiniz" style="flex:1;min-width:0;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:0.85rem 1rem;color:var(--text);font-size:0.95rem;font-family:inherit;outline:none;width:100%;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter')sorgulaMusteri()">
-      <button onclick="sorgulaMusteri()" class="btn-primary" style="white-space:nowrap;width:auto;">🔍 Sorgula</button>
-    </div>
-    <div id="sorguSonuc" style="margin-top:1.5rem;"></div>
-  </div>
-</section>
-
 <!-- İLETİŞİM -->
 <section id="iletisim">
   <div class="container">
@@ -419,6 +402,7 @@
   <div class="footer-bottom">
     <span>© 2026 Sata Mühendislik. Tüm hakları saklıdır.</span>
     <span>Çelik İmalat & Konstrüksiyon</span>
+    <a href="musteri.html" style="color:var(--text-muted);font-size:0.8rem;text-decoration:none;border:1px solid var(--border);padding:0.25rem 0.6rem;border-radius:6px;">👤 Müşteri Girişi</a>
     <a href="admin.html" style="color:var(--text-muted);font-size:0.8rem;text-decoration:none;border:1px solid var(--border);padding:0.25rem 0.6rem;border-radius:6px;">🔐 Admin</a>
   </div>
 </footer>
