@@ -95,6 +95,9 @@ input, textarea, select, button { font-family: inherit; }
 }
 .nav-cta:hover { background: var(--accent-dark) !important; }
 
+/* Sadece mobil/desktop göster */
+.mob-only { display: none; }
+
 /* Nav utils — Müşteri & Admin butonları, her zaman görünür */
 .nav-utils {
   display: flex;
@@ -858,8 +861,9 @@ footer {
 @media (max-width: 768px) {
   /* Navbar */
   .hamburger { display: flex; }
-  /* Müşteri & Admin butonlarını mobilde küçült */
-  .nav-util-btn { font-size: 0.72rem; padding: 0.28rem 0.5rem; }
+  /* Mobilde desk-only gizle, mob-only göster */
+  .desk-only { display: none !important; }
+  .mob-only { display: list-item; }
   .nav-links {
     display: none;
     position: fixed;
