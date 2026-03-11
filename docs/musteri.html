@@ -218,23 +218,41 @@ function switchTab(tab) {
 // AUTH STATE
 auth.onAuthStateChanged(async user => {
   if (user) {
-    // Profili kontrol et
-    const profil = await db.collection('musteriler').doc(user.uid).get();
-    const data = profil.exists ? profil.data() : {};
+    try {
+      // Token'ın Firestore'a ulaşması için bekle
+      await user.getIdToken(true);
 
-    // Telefon yoksa telefon modalını aç
-    if (!data.telefon) {
-      document.getElementById('phoneOverlay').classList.add('open');
-      return;
+      // Profili kontrol et — yoksa oluştur (Google girişi için)
+      let profil = await db.collection('musteriler').doc(user.uid).get();
+      if (!profil.exists) {
+        await db.collection('musteriler').doc(user.uid).set({
+          ad: user.displayName || '',
+          email: user.email,
+          telefon: '',
+          olusturma: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        profil = await db.collection('musteriler').doc(user.uid).get();
+      }
+      const data = profil.data() || {};
+
+      // Telefon yoksa telefon modalını aç
+      if (!data.telefon) {
+        document.getElementById('phoneOverlay').classList.add('open');
+        return;
+      }
+
+      // Dashboard'u göster
+      document.getElementById('authSection').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('phoneOverlay').classList.remove('open');
+      document.getElementById('userName').textContent = data.ad || user.displayName || user.email;
+      document.getElementById('userMeta').textContent = [user.email, data.telefon].filter(Boolean).join(' · ');
+      loadTalepler(user.email);
+    } catch (e) {
+      console.error('Auth state error:', e);
+      // Giriş başarısız — çıkış yap
+      await auth.signOut();
     }
-
-    // Dashboard'u göster
-    document.getElementById('authSection').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    document.getElementById('phoneOverlay').classList.remove('open');
-    document.getElementById('userName').textContent = data.ad || user.displayName || user.email;
-    document.getElementById('userMeta').textContent = [user.email, data.telefon].filter(Boolean).join(' · ');
-    loadTalepler(user.email);
   } else {
     document.getElementById('authSection').style.display = 'block';
     document.getElementById('dashboard').style.display = 'none';
@@ -267,37 +285,25 @@ async function loginMusteri() {
   }
 }
 
-// GOOGLE GİRİŞ
+// GOOGLE GİRİŞ — sadece auth popup, Firestore işlemleri onAuthStateChanged'da
 async function googleGiris() {
   const btns = document.querySelectorAll('.google-btn');
-  // SVG'yi koruyarak disabled yap, opacity ile göster
   btns.forEach(b => { b.disabled = true; b.style.opacity = '0.6'; });
   try {
     const provider = new firebase.auth.GoogleAuthProvider();
-    const result = await auth.signInWithPopup(provider);
-    // Profil yoksa oluştur (ad bilgisini Google'dan al)
-    const profil = await db.collection('musteriler').doc(result.user.uid).get();
-    if (!profil.exists) {
-      await db.collection('musteriler').doc(result.user.uid).set({
-        ad: result.user.displayName || '',
-        email: result.user.email,
-        telefon: '',
-        olusturma: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    }
-    // onAuthStateChanged telefon kontrolünü yapacak
+    await auth.signInWithPopup(provider);
+    // onAuthStateChanged tüm profil ve yönlendirme işlemlerini yapacak
   } catch (e) {
     if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
-      // Aktif tabın hata div'ine yaz
       const onLogin = document.getElementById('tabLogin').classList.contains('active');
       const errEl = document.getElementById(onLogin ? 'loginError' : 'registerError');
       const googleMsgs = {
-        'auth/unauthorized-domain': 'Bu domain Firebase\'de yetkili değil. Lütfen Firebase Console\'dan erberkay.github.io adresini authorized domains listesine ekleyin.',
+        'auth/unauthorized-domain': 'Bu domain Firebase\'de yetkili değil. Firebase Console → Authentication → Settings → Authorized domains kısmına erberkay.github.io ekleyin.',
         'auth/popup-blocked': 'Popup engellendi. Tarayıcı izinlerini kontrol edin.',
-        'auth/account-exists-with-different-credential': 'Bu e-posta farklı bir giriş yöntemiyle kayıtlı.',
+        'auth/account-exists-with-different-credential': 'Bu e-posta farklı bir yöntemle kayıtlı. E-posta ile giriş yapın.',
         'auth/network-request-failed': 'Ağ hatası. İnternet bağlantınızı kontrol edin.',
       };
-      errEl.textContent = googleMsgs[e.code] || 'Google girişi başarısız: ' + (e.message || e.code);
+      errEl.textContent = googleMsgs[e.code] || ('Google girişi başarısız: ' + (e.code || e.message));
       errEl.style.display = 'block';
     }
     btns.forEach(b => { b.disabled = false; b.style.opacity = '1'; });
