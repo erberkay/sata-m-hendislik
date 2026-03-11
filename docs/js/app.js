@@ -96,6 +96,35 @@ function resetForm() {
   if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '<span>📨 Teklif Talebini Gönder</span>'; }
 }
 
+// MÜŞTERİ SORGULA
+const durumTr = { yeni:'🆕 Yeni — İnceleme Bekliyor', inceleniyor:'🔍 İnceleniyor', teklif_verildi:'💰 Teklif Verildi', kabul_edildi:'✅ Kabul Edildi', reddedildi:'❌ Reddedildi', tamamlandi:'🏁 Tamamlandı' };
+
+async function sorgulaMusteri() {
+  const email = document.getElementById('sorguEmail').value.trim();
+  const sonuc = document.getElementById('sorguSonuc');
+  if (!email) { sonuc.innerHTML = '<p style="color:var(--danger);font-size:0.9rem;">Lütfen e-posta adresinizi girin.</p>'; return; }
+
+  sonuc.innerHTML = '<p style="color:var(--text-muted);font-size:0.9rem;">Sorgulanıyor...</p>';
+  try {
+    const snap = await db.collection('projeler').where('musteri_email', '==', email).orderBy('olusturma', 'desc').get();
+    if (snap.empty) {
+      sonuc.innerHTML = '<p style="color:var(--text-muted);font-size:0.9rem;">Bu e-posta ile kayıtlı talep bulunamadı.</p>';
+      return;
+    }
+    const rows = snap.docs.map(d => {
+      const p = d.data();
+      const tarih = p.olusturma?.toDate ? p.olusturma.toDate().toLocaleDateString('tr-TR') : '—';
+      return `<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:0.75rem;">
+        <div style="font-weight:600;margin-bottom:0.35rem;">${p.baslik || '—'}</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);">📅 ${tarih} &nbsp;|&nbsp; ${durumTr[p.durum] || p.durum}</div>
+      </div>`;
+    }).join('');
+    sonuc.innerHTML = `<div style="margin-bottom:0.75rem;font-size:0.85rem;color:var(--text-muted);">${snap.size} talep bulundu:</div>${rows}`;
+  } catch (e) {
+    sonuc.innerHTML = '<p style="color:var(--danger);font-size:0.9rem;">Sorgulama başarısız. Lütfen tekrar deneyin.</p>';
+  }
+}
+
 // SCROLL ANİMASYONLAR
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; } });
