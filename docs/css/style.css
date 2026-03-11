@@ -863,7 +863,7 @@ footer {
   .hamburger { display: flex; }
   /* Mobilde desk-only gizle, mob-only göster */
   .desk-only { display: none !important; }
-  .mob-only { display: list-item; }
+  .mob-only { display: block; }
   .nav-links {
     display: none;
     position: fixed;
@@ -971,6 +971,7 @@ footer {
 @media (max-width: 480px) {
   section { padding: 3.5rem 1rem; }
   .navbar { padding: 0 1rem; }
+  .nav-logo { font-size: 1rem; }
   .steps-grid { grid-template-columns: 1fr; }
   .hero h1 { font-size: 1.75rem; }
   .hero-badge { font-size: 0.72rem; }
@@ -982,4 +983,7 @@ footer {
   /* Talep sorgula input+buton dikey */
   #talep-sorgula input, #talep-sorgula button { width: 100%; }
   #talep-sorgula > .container > div { flex-direction: column !important; }
+  /* Footer bottom - sadece copyright ve müşteri linki göster */
+  .footer-bottom { gap: 0.75rem; }
+  /* Toast full-width zaten mobile'da set edilmiş */
 }

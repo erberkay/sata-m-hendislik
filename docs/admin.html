@@ -149,10 +149,27 @@
       .sidebar.open{transform:translateX(0);}
       .sidebar-overlay.open{display:block;}
       .main-content{margin-left:0;}
+      .topbar{padding:0.85rem 1rem;}
+      .topbar h1{font-size:1rem;}
+      .topbar-right .topbar-btn:first-child{display:none;} /* "Siteyi Gör" gizle */
       .stat-grid{grid-template-columns:1fr 1fr;}
+      .table-container{overflow-x:auto;}
       .detail-grid{grid-template-columns:1fr;}
       .teklif-grid{grid-template-columns:1fr 1fr;}
+      .page-content{padding:1rem;}
       .mob-menu-btn{display:inline-flex;}
+      .table-header{padding:1rem;}
+      .table-filters{gap:0.35rem;}
+      .filter-btn{padding:0.3rem 0.6rem;font-size:0.72rem;}
+    }
+    @media(max-width:480px){
+      .stat-grid{grid-template-columns:1fr 1fr;}
+      .stat-card{padding:1rem;}
+      .stat-card .value{font-size:1.6rem;}
+      .teklif-grid{grid-template-columns:1fr;}
+      .modal{border-radius:12px;}
+      .modal-body{padding:1rem;}
+      th,td{padding:0.75rem 0.85rem;}
     }
   </style>
 </head>
