@@ -14,12 +14,15 @@ function toast(type, msg) {
 }
 
 // ===== AUTH =====
+const ADMIN_EMAIL = 'alperenkarpuz613@gmail.com';
+
 auth.onAuthStateChanged(user => {
-  if (user) {
+  if (user && user.email === ADMIN_EMAIL) {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminApp').style.display = 'flex';
     loadDashboard();
   } else {
+    if (user) auth.signOut();
     document.getElementById('loginScreen').style.display = 'flex';
     document.getElementById('adminApp').style.display = 'none';
   }
@@ -30,7 +33,13 @@ async function loginWithGoogle() {
   errEl.style.display = 'none';
   try {
     const provider = new firebase.auth.GoogleAuthProvider();
-    await auth.signInWithPopup(provider);
+    provider.setCustomParameters({ login_hint: ADMIN_EMAIL });
+    const result = await auth.signInWithPopup(provider);
+    if (result.user.email !== ADMIN_EMAIL) {
+      await auth.signOut();
+      errEl.textContent = 'Bu hesapla giriş yetkiniz yok.';
+      errEl.style.display = 'block';
+    }
   } catch (e) {
     errEl.style.display = 'block';
   }
