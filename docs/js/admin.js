@@ -74,7 +74,8 @@ function showPage(page, filter) {
 }
 
 function refreshData() {
-  toast('success', 'Gerçek zamanlı aktif — otomatik güncelleniyor');
+  startRealtime();
+  toast('success', 'Veriler yenilendi');
 }
 
 // ===== REAL-TIME =====
