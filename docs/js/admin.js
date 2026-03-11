@@ -25,17 +25,14 @@ auth.onAuthStateChanged(user => {
   }
 });
 
-async function login() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const sifre = document.getElementById('loginPassword').value;
+async function loginWithGoogle() {
   const errEl = document.getElementById('loginError');
   errEl.style.display = 'none';
-
   try {
-    await auth.signInWithEmailAndPassword(email, sifre);
+    const provider = new firebase.auth.GoogleAuthProvider();
+    await auth.signInWithPopup(provider);
   } catch (e) {
     errEl.style.display = 'block';
-    errEl.textContent = 'Hatalı e-posta veya şifre.';
   }
 }
 
