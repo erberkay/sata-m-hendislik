@@ -143,13 +143,17 @@
     .toast .t-text{flex:1;font-size:0.875rem;font-weight:500;}
     @keyframes slideIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
 
+    .mob-menu-btn{display:none;background:none;border:none;color:var(--text);font-size:1.3rem;cursor:pointer;padding:0.25rem;}
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:49;}
     @media(max-width:768px){
-      .sidebar{transform:translateX(-100%);}
+      .sidebar{transform:translateX(-100%);transition:transform 0.25s;}
       .sidebar.open{transform:translateX(0);}
+      .sidebar-overlay.open{display:block;}
       .main-content{margin-left:0;}
       .stat-grid{grid-template-columns:1fr 1fr;}
       .detail-grid{grid-template-columns:1fr;}
       .teklif-grid{grid-template-columns:1fr 1fr;}
+      .mob-menu-btn{display:inline-flex;}
     }
   </style>
 </head>
@@ -178,12 +182,12 @@
     </div>
     <nav class="sidebar-nav">
       <div class="nav-section-label">Ana Menü</div>
-      <div class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard"><span class="icon">📊</span> Dashboard</div>
-      <div class="nav-item" onclick="showPage('projeler')" id="nav-projeler"><span class="icon">📋</span> Tüm Talepler <span class="badge" id="yeniBadge" style="display:none">0</span></div>
+      <div class="nav-item active" onclick="showPage('dashboard');closeSidebar()" id="nav-dashboard"><span class="icon">📊</span> Dashboard</div>
+      <div class="nav-item" onclick="showPage('projeler');closeSidebar()" id="nav-projeler"><span class="icon">📋</span> Tüm Talepler <span class="badge" id="yeniBadge" style="display:none">0</span></div>
       <div class="nav-section-label" style="margin-top:1rem;">Duruma Göre</div>
-      <div class="nav-item" onclick="showPage('projeler','yeni')"><span class="icon">🆕</span> Yeni Talepler</div>
-      <div class="nav-item" onclick="showPage('projeler','teklif_verildi')"><span class="icon">💰</span> Teklif Verilenler</div>
-      <div class="nav-item" onclick="showPage('projeler','tamamlandi')"><span class="icon">✅</span> Tamamlananlar</div>
+      <div class="nav-item" onclick="showPage('projeler','yeni');closeSidebar()"><span class="icon">🆕</span> Yeni Talepler</div>
+      <div class="nav-item" onclick="showPage('projeler','teklif_verildi');closeSidebar()"><span class="icon">💰</span> Teklif Verilenler</div>
+      <div class="nav-item" onclick="showPage('projeler','tamamlandi');closeSidebar()"><span class="icon">✅</span> Tamamlananlar</div>
     </nav>
     <div class="sidebar-footer">
       <button class="logout-btn" onclick="logout()"><span>🚪</span> Çıkış Yap</button>
@@ -192,7 +196,10 @@
 
   <main class="main-content">
     <div class="topbar">
-      <h1 id="pageTitle">Dashboard</h1>
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <button class="mob-menu-btn" onclick="toggleSidebar()">☰</button>
+        <h1 id="pageTitle">Dashboard</h1>
+      </div>
       <div class="topbar-right">
         <a href="index.html" target="_blank" class="topbar-btn">🌐 Siteyi Gör</a>
         <button class="topbar-btn" onclick="refreshData()">🔄 Yenile</button>
@@ -244,7 +251,18 @@
   </div>
 </div>
 
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 <script src="js/firebase-config.js"></script>
 <script src="js/admin.js"></script>
+<script>
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
+</script>
 </body>
 </html>
