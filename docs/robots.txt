@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://erberkay.github.io/sata-m-hendislik/sitemap.xml

@@ -215,7 +215,16 @@
           <div class="stat-card green"><div class="label">Tamamlandı</div><div class="value" id="statTamamlandi">—</div><div class="change">Başarıyla teslim</div></div>
         </div>
         <div class="table-container">
-          <div class="table-header"><h2>Son Talepler</h2></div>
+          <div class="table-header">
+            <h2>Tüm Müşteri Talepleri</h2>
+            <div class="table-filters" id="dashFilterBtns">
+              <button class="filter-btn active" onclick="dashFilter(event,'')">Tümü</button>
+              <button class="filter-btn" onclick="dashFilter(event,'yeni')">🆕 Yeni</button>
+              <button class="filter-btn" onclick="dashFilter(event,'inceleniyor')">🔍 İnceleniyor</button>
+              <button class="filter-btn" onclick="dashFilter(event,'teklif_verildi')">💰 Teklif</button>
+              <button class="filter-btn" onclick="dashFilter(event,'tamamlandi')">✅ Tamamlandı</button>
+            </div>
+          </div>
           <div id="dashboardTableBody"></div>
         </div>
       </div>

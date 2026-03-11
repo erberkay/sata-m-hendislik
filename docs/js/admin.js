@@ -2,6 +2,8 @@
 let currentFilter = '';
 let currentProjeId = null;
 let allProjeler = [];
+let unsubscribeDashboard = null;
+let unsubscribeProjeler = null;
 
 // ===== TOAST =====
 function toast(type, msg) {
@@ -18,8 +20,10 @@ auth.onAuthStateChanged(user => {
   if (user) {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminApp').style.display = 'flex';
-    loadDashboard();
+    startRealtime();
   } else {
+    if (unsubscribeDashboard) { unsubscribeDashboard(); unsubscribeDashboard = null; }
+    if (unsubscribeProjeler) { unsubscribeProjeler(); unsubscribeProjeler = null; }
     document.getElementById('loginScreen').style.display = 'flex';
     document.getElementById('adminApp').style.display = 'none';
   }
@@ -55,51 +59,59 @@ function showPage(page, filter) {
 }
 
 function refreshData() {
-  const active = document.querySelector('[id^="page-"]:not([style*="none"])');
-  if (active?.id === 'page-projeler') loadProjeler(currentFilter);
-  else loadDashboard();
-  toast('success', 'Yenilendi');
+  toast('success', 'Gerçek zamanlı aktif — otomatik güncelleniyor');
 }
 
-// ===== DASHBOARD =====
-async function loadDashboard() {
-  try {
-    const snap = await db.collection('projeler').orderBy('olusturma', 'desc').get();
-    allProjeler = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-    const toplam = allProjeler.length;
-    const yeni = allProjeler.filter(p => p.durum === 'yeni').length;
-    const teklif = allProjeler.filter(p => p.durum === 'teklif_verildi').length;
-    const tamam = allProjeler.filter(p => p.durum === 'tamamlandi').length;
-
-    document.getElementById('statToplam').textContent = toplam;
-    document.getElementById('statYeni').textContent = yeni;
-    document.getElementById('statTeklif').textContent = teklif;
-    document.getElementById('statTamamlandi').textContent = tamam;
-
-    const badge = document.getElementById('yeniBadge');
-    badge.textContent = yeni;
-    badge.style.display = yeni > 0 ? 'inline-block' : 'none';
-
-    document.getElementById('dashboardTableBody').innerHTML = renderTable(allProjeler.slice(0, 10));
-  } catch (e) {
-    console.error(e);
-    toast('error', 'Veriler yüklenemedi');
-  }
+// ===== REAL-TIME =====
+function startRealtime() {
+  if (unsubscribeDashboard) unsubscribeDashboard();
+  unsubscribeDashboard = db.collection('projeler').orderBy('olusturma', 'desc')
+    .onSnapshot(snap => {
+      allProjeler = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      updateDashboardUI();
+      // Projeler sayfası açıksa orayı da güncelle
+      const projPage = document.getElementById('page-projeler');
+      if (projPage && projPage.style.display !== 'none') {
+        const filtered = currentFilter ? allProjeler.filter(p => p.durum === currentFilter) : allProjeler;
+        document.getElementById('projelerTableBody').innerHTML = renderTable(filtered);
+      }
+    }, e => { console.error(e); toast('error', 'Bağlantı hatası'); });
 }
+
+let dashCurrentFilter = '';
+
+function updateDashboardUI() {
+  const toplam = allProjeler.length;
+  const yeni = allProjeler.filter(p => p.durum === 'yeni').length;
+  const teklif = allProjeler.filter(p => p.durum === 'teklif_verildi').length;
+  const tamam = allProjeler.filter(p => p.durum === 'tamamlandi').length;
+
+  document.getElementById('statToplam').textContent = toplam;
+  document.getElementById('statYeni').textContent = yeni;
+  document.getElementById('statTeklif').textContent = teklif;
+  document.getElementById('statTamamlandi').textContent = tamam;
+
+  const badge = document.getElementById('yeniBadge');
+  badge.textContent = yeni;
+  badge.style.display = yeni > 0 ? 'inline-block' : 'none';
+
+  const filtered = dashCurrentFilter ? allProjeler.filter(p => p.durum === dashCurrentFilter) : allProjeler;
+  document.getElementById('dashboardTableBody').innerHTML = renderTable(filtered);
+}
+
+function dashFilter(event, filter) {
+  dashCurrentFilter = filter;
+  document.querySelectorAll('#dashFilterBtns .filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  updateDashboardUI();
+}
+
+function loadDashboard() { updateDashboardUI(); }
 
 // ===== PROJELER =====
-async function loadProjeler(filter) {
-  try {
-    let query = db.collection('projeler').orderBy('olusturma', 'desc');
-    if (filter) query = query.where('durum', '==', filter);
-    const snap = await query.get();
-    allProjeler = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    document.getElementById('projelerTableBody').innerHTML = renderTable(allProjeler);
-  } catch (e) {
-    console.error(e);
-    toast('error', 'Veriler yüklenemedi');
-  }
+function loadProjeler(filter) {
+  const filtered = filter ? allProjeler.filter(p => p.durum === filter) : allProjeler;
+  document.getElementById('projelerTableBody').innerHTML = renderTable(filtered);
 }
 
 function filterProjeler(event, filter) {
