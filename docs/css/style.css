@@ -57,6 +57,7 @@ input, textarea, select, button { font-family: inherit; }
   gap: 10px;
   font-size: 1.25rem;
   font-weight: 700;
+  flex-shrink: 0;
 }
 .nav-logo .logo-icon {
   width: 36px;
@@ -72,8 +73,10 @@ input, textarea, select, button { font-family: inherit; }
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
   list-style: none;
+  flex: 1;
+  justify-content: center;
 }
 .nav-links a {
   color: var(--text-muted);
