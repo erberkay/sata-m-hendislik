@@ -2,8 +2,17 @@
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('navLinks');
 if (hamburger) {
-  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    hamburger.classList.toggle('open');
+  });
 }
+document.addEventListener('click', e => {
+  if (navLinks?.classList.contains('open') && !navLinks.contains(e.target) && !hamburger?.contains(e.target)) {
+    navLinks.classList.remove('open');
+    hamburger.classList.remove('open');
+  }
+});
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     const id = a.getAttribute('href');
@@ -13,6 +22,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       e.preventDefault();
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       navLinks.classList.remove('open');
+      hamburger?.classList.remove('open');
     }
   });
 });
