@@ -4,16 +4,15 @@
 // buradan kopyalayıp yapıştır
 // =====================================================
 const firebaseConfig = {
-  apiKey: "BURAYA_API_KEY",
-  authDomain: "PROJE_ID.firebaseapp.com",
-  projectId: "PROJE_ID",
-  storageBucket: "PROJE_ID.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID"
+  apiKey: "AIzaSyCbbSkP0MvAYqhpBGSBZWzz597fTGqZHTU",
+  authDomain: "sata-muhendislik.firebaseapp.com",
+  projectId: "sata-muhendislik",
+  storageBucket: "sata-muhendislik.firebasestorage.app",
+  messagingSenderId: "716541850632",
+  appId: "1:716541850632:web:9ee3fd7df74e6ff4b64dbd"
 };
 
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
-const storage = firebase.storage();
 const auth = firebase.auth();

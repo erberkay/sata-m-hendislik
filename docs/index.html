@@ -12,7 +12,6 @@
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 </head>
 <body>
@@ -277,25 +276,6 @@
                 <label>E-posta <span class="req">*</span></label>
                 <input type="email" name="email" placeholder="ornek@email.com" required>
                 <span class="hint">Teklifiniz bu adrese de gönderilecektir</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-section">
-            <div class="form-section-title">📎 Teknik Çizim & Fotoğraflar</div>
-            <div class="form-group">
-              <label>Dosya Ekle</label>
-              <div class="file-drop" id="fileDrop">
-                <input type="file" id="fileInput" multiple accept=".jpg,.jpeg,.png,.gif,.pdf,.dwg,.dxf">
-                <div class="drop-icon">📁</div>
-                <div class="drop-text">Dosyaları sürükleyin veya <span>tıklayın</span><br><small style="color:var(--text-dim);">JPG, PNG, PDF, DWG — max 10MB</small></div>
-              </div>
-              <div class="file-preview" id="filePreview"></div>
-              <div id="uploadProgress" style="display:none;margin-top:0.5rem;">
-                <div style="background:var(--border);border-radius:4px;height:4px;overflow:hidden;">
-                  <div id="progressBar" style="height:100%;background:var(--accent);width:0%;transition:width 0.3s;"></div>
-                </div>
-                <p style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;" id="progressText">Dosyalar yükleniyor...</p>
               </div>
             </div>
           </div>
