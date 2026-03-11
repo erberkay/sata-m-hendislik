@@ -913,6 +913,15 @@ footer {
   .mobile-cta { display: block; }
   body { padding-bottom: 80px; }
   #teklif-formu { padding-bottom: 2rem; }
+
+  /* WhatsApp FAB - mobile CTA'nın üstüne al */
+  .whatsapp-fab { bottom: 5.5rem; right: 1rem; width: 48px; height: 48px; }
+
+  /* Admin linki navbar'da gizle, sadece hamburger menüde gözüksün */
+  .nav-links li:last-child a { font-size: 0.9rem !important; }
+
+  /* Talep sorgula section */
+  #talep-sorgula .container > div:first-of-type { flex-direction: column; }
 }
 
 /* ========== WHATSAPP FAB ========== */
@@ -944,7 +953,8 @@ footer {
   .hizmet-kart { padding: 1.5rem; }
   .step-kart { padding: 1.5rem 1rem; }
   .form-section-title { font-size: 0.72rem; }
-  #hakkimizda .container > div > div:last-child {
-    grid-template-columns: 1fr 1fr !important;
-  }
+  #hakkimizda .container > div > div:last-child { grid-template-columns: 1fr 1fr !important; }
+  /* Talep sorgula input+buton dikey */
+  #talep-sorgula input, #talep-sorgula button { width: 100%; }
+  #talep-sorgula > .container > div { flex-direction: column !important; }
 }

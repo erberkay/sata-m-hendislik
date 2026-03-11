@@ -344,9 +344,9 @@
       <h2 class="section-title">Talebinizi Sorgulayın</h2>
       <p class="section-sub" style="margin:0 auto;">Form gönderirken kullandığınız e-posta adresini girin, talebinizin güncel durumunu görün.</p>
     </div>
-    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-      <input type="email" id="sorguEmail" placeholder="E-posta adresiniz" style="flex:1;min-width:200px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:0.85rem 1rem;color:var(--text);font-size:0.95rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter')sorgulaMusteri()">
-      <button onclick="sorgulaMusteri()" class="btn-primary" style="white-space:nowrap;">🔍 Sorgula</button>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;" id="sorguForm">
+      <input type="email" id="sorguEmail" placeholder="E-posta adresiniz" style="flex:1;min-width:0;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:0.85rem 1rem;color:var(--text);font-size:0.95rem;font-family:inherit;outline:none;width:100%;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter')sorgulaMusteri()">
+      <button onclick="sorgulaMusteri()" class="btn-primary" style="white-space:nowrap;width:auto;">🔍 Sorgula</button>
     </div>
     <div id="sorguSonuc" style="margin-top:1.5rem;"></div>
   </div>
