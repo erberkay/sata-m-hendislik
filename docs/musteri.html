@@ -14,16 +14,15 @@
       --bg:#0a0c10;--bg-card:#12161f;--bg-card2:#1a1f2e;--border:#252b3b;
       --accent:#f97316;--accent-dark:#c2410c;--accent-glow:rgba(249,115,22,0.12);
       --text:#e8ecf4;--text-muted:#7a8299;--text-dim:#4a5268;
-      --success:#22c55e;--danger:#ef4444;--warning:#eab308;--info:#3b82f6;
-      --radius:12px;--shadow:0 4px 24px rgba(0,0,0,0.4);
+      --success:#22c55e;--danger:#ef4444;--radius:12px;
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:2rem 1rem;}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem;}
     a{color:inherit;text-decoration:none;}
 
     .top-bar{width:100%;max-width:520px;display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;}
     .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1rem;}
-    .logo-icon{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+    .logo-icon{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;}
     .back-btn{color:var(--text-muted);font-size:0.85rem;border:1px solid var(--border);padding:0.35rem 0.75rem;border-radius:7px;transition:all 0.15s;}
     .back-btn:hover{color:var(--text);border-color:var(--accent);}
 
@@ -34,24 +33,43 @@
     .tab-btn{flex:1;padding:0.6rem;border:none;background:transparent;color:var(--text-muted);font-size:0.875rem;font-weight:600;border-radius:7px;cursor:pointer;font-family:inherit;transition:all 0.15s;}
     .tab-btn.active{background:var(--accent);color:#fff;}
 
-    /* FORMS */
+    /* INPUTS */
     .auth-form{display:flex;flex-direction:column;gap:0.75rem;}
     .auth-form input{background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:0.85rem 1rem;color:var(--text);font-size:0.95rem;font-family:inherit;outline:none;transition:border-color 0.2s;width:100%;}
     .auth-form input:focus{border-color:var(--accent);}
     .auth-form input::placeholder{color:var(--text-dim);}
     .field-hint{font-size:0.75rem;color:var(--text-dim);margin-top:-0.25rem;}
+
+    /* BUTTONS */
     .submit-btn{background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:0.9rem;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.2s;width:100%;margin-top:0.25rem;}
     .submit-btn:hover{background:var(--accent-dark);}
     .submit-btn:disabled{opacity:0.6;cursor:not-allowed;}
+
+    .divider-or{display:flex;align-items:center;gap:0.75rem;margin:0.5rem 0;color:var(--text-dim);font-size:0.8rem;}
+    .divider-or::before,.divider-or::after{content:'';flex:1;height:1px;background:var(--border);}
+
+    .google-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:0.75rem;background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:0.85rem;font-size:0.9rem;font-weight:600;color:var(--text);cursor:pointer;font-family:inherit;transition:all 0.2s;}
+    .google-btn:hover{border-color:#4285f4;background:rgba(66,133,244,0.08);}
+    .google-btn:disabled{opacity:0.6;cursor:not-allowed;}
+    .google-icon{width:20px;height:20px;flex-shrink:0;}
+
     .auth-error{color:var(--danger);font-size:0.82rem;text-align:center;padding:0.5rem;background:rgba(239,68,68,0.08);border-radius:8px;display:none;}
-    .auth-success-msg{color:var(--success);font-size:0.82rem;text-align:center;padding:0.5rem;background:rgba(34,197,94,0.08);border-radius:8px;display:none;}
+
+    /* TELEFON MODAL - Google sonrası */
+    .phone-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem;}
+    .phone-overlay.open{display:flex;}
+    .phone-modal{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:2rem;width:100%;max-width:420px;}
+    .phone-modal h2{font-size:1.2rem;font-weight:700;margin-bottom:0.5rem;}
+    .phone-modal p{color:var(--text-muted);font-size:0.875rem;margin-bottom:1.5rem;line-height:1.6;}
+    .phone-modal input{background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:0.85rem 1rem;color:var(--text);font-size:0.95rem;font-family:inherit;outline:none;width:100%;margin-bottom:0.75rem;transition:border-color 0.2s;}
+    .phone-modal input:focus{border-color:var(--accent);}
+    .phone-modal .auth-error{margin-bottom:0.5rem;}
 
     /* DASHBOARD */
     #dashboard{display:none;}
     .dash-header{background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;}
-    .user-info{display:flex;flex-direction:column;gap:2px;}
-    .user-name{font-weight:700;font-size:0.95rem;}
-    .user-meta{font-size:0.8rem;color:var(--text-muted);}
+    .user-info .user-name{font-weight:700;font-size:0.95rem;}
+    .user-info .user-meta{font-size:0.8rem;color:var(--text-muted);margin-top:2px;}
     .logout-btn{background:transparent;border:1px solid var(--border);color:var(--text-muted);border-radius:8px;padding:0.35rem 0.75rem;font-size:0.82rem;cursor:pointer;font-family:inherit;transition:all 0.15s;white-space:nowrap;}
     .logout-btn:hover{border-color:var(--danger);color:var(--danger);}
 
@@ -70,7 +88,6 @@
     .badge.kabul_edildi{background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.25);}
     .badge.reddedildi{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.25);}
     .badge.tamamlandi{background:rgba(139,92,246,0.15);color:#a78bfa;border:1px solid rgba(139,92,246,0.25);}
-
     .teklif-box{background:var(--bg);border:1px solid rgba(249,115,22,0.25);border-radius:10px;padding:1rem 1.25rem;margin-top:0.75rem;}
     .teklif-box .label{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);font-weight:600;margin-bottom:0.4rem;}
     .teklif-box .fiyat{font-size:1.4rem;font-weight:800;color:var(--success);}
@@ -78,7 +95,7 @@
     .teklif-box .not{font-size:0.82rem;color:var(--text-muted);margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--border);}
     .divider{height:1px;background:var(--border);margin:1rem 0;}
 
-    @media(max-width:480px){.card{padding:1.5rem 1rem;}}
+    @media(max-width:480px){.card{padding:1.5rem 1rem;}.phone-modal{padding:1.5rem 1rem;}}
   </style>
 </head>
 <body>
@@ -92,7 +109,6 @@
 </div>
 
 <div class="card">
-
   <!-- AUTH SECTION -->
   <div id="authSection">
     <div style="text-align:center;margin-bottom:1.5rem;">
@@ -106,33 +122,42 @@
       <button class="tab-btn" id="tabRegister" onclick="switchTab('register')">Kayıt Ol</button>
     </div>
 
-    <!-- GİRİŞ FORMU -->
+    <!-- GİRİŞ -->
     <div id="loginForm">
       <div class="auth-form">
         <input type="email" id="loginEmail" placeholder="E-posta adresiniz" autocomplete="email">
         <input type="password" id="loginPassword" placeholder="Şifreniz" autocomplete="current-password" onkeydown="if(event.key==='Enter')loginMusteri()">
         <div class="auth-error" id="loginError"></div>
         <button class="submit-btn" id="loginBtn" onclick="loginMusteri()">🔓 Giriş Yap</button>
+        <div class="divider-or">veya</div>
+        <button class="google-btn" id="googleLoginBtn" onclick="googleGiris()">
+          <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Google ile Giriş Yap
+        </button>
       </div>
     </div>
 
-    <!-- KAYIT FORMU -->
+    <!-- KAYIT -->
     <div id="registerForm" style="display:none;">
       <div class="auth-form">
         <input type="text" id="regAd" placeholder="Ad Soyad *" autocomplete="name">
         <input type="email" id="regEmail" placeholder="E-posta adresiniz *" autocomplete="email">
         <input type="tel" id="regTelefon" placeholder="Telefon numaranız * (05xx xxx xx xx)" autocomplete="tel">
-        <p class="field-hint">📞 Sizinle iletişime geçebilmemiz için telefon numaranız gereklidir.</p>
+        <p class="field-hint">📞 Sizinle iletişime geçebilmemiz için gereklidir.</p>
         <input type="password" id="regPassword" placeholder="Şifre (en az 6 karakter) *" autocomplete="new-password">
         <input type="password" id="regPassword2" placeholder="Şifreyi tekrar girin *" autocomplete="new-password" onkeydown="if(event.key==='Enter')registerMusteri()">
         <div class="auth-error" id="registerError"></div>
-        <div class="auth-success-msg" id="registerSuccess"></div>
         <button class="submit-btn" id="registerBtn" onclick="registerMusteri()">✅ Kayıt Ol</button>
+        <div class="divider-or">veya</div>
+        <button class="google-btn" id="googleRegisterBtn" onclick="googleGiris()">
+          <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Google ile Kayıt Ol
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- DASHBOARD SECTION -->
+  <!-- DASHBOARD -->
   <div id="dashboard">
     <div class="dash-header">
       <div class="user-info">
@@ -141,11 +166,20 @@
       </div>
       <button class="logout-btn" onclick="logoutMusteri()">Çıkış Yap</button>
     </div>
-    <div id="resultArea">
-      <div class="loading">Talepler yükleniyor...</div>
-    </div>
+    <div id="resultArea"><div class="loading">Yükleniyor...</div></div>
   </div>
+</div>
 
+<!-- TELEFON MODAL (Google girişi sonrası) -->
+<div class="phone-overlay" id="phoneOverlay">
+  <div class="phone-modal">
+    <div style="font-size:1.5rem;margin-bottom:0.75rem;">📞</div>
+    <h2>Telefon Numaranız</h2>
+    <p>Sizinle iletişime geçebilmemiz için telefon numaranızı girin. Bu bilgi yalnızca proje görüşmeleri için kullanılır.</p>
+    <input type="tel" id="phoneInput" placeholder="05xx xxx xx xx" autocomplete="tel" onkeydown="if(event.key==='Enter')kaydetTelefon()">
+    <div class="auth-error" id="phoneError"></div>
+    <button class="submit-btn" id="phoneBtn" onclick="kaydetTelefon()">💾 Kaydet ve Devam Et</button>
+  </div>
 </div>
 
 <script src="js/firebase-config.js"></script>
@@ -173,64 +207,122 @@ function switchTab(tab) {
   document.getElementById('tabRegister').classList.toggle('active', !isLogin);
   document.getElementById('loginError').style.display = 'none';
   document.getElementById('registerError').style.display = 'none';
-  document.getElementById('registerSuccess').style.display = 'none';
 }
 
-// Auth state
+// AUTH STATE
 auth.onAuthStateChanged(async user => {
   if (user) {
+    // Profili kontrol et
+    const profil = await db.collection('musteriler').doc(user.uid).get();
+    const data = profil.exists ? profil.data() : {};
+
+    // Telefon yoksa telefon modalını aç
+    if (!data.telefon) {
+      document.getElementById('phoneOverlay').classList.add('open');
+      return;
+    }
+
+    // Dashboard'u göster
     document.getElementById('authSection').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
-    // Profil bilgilerini çek
-    try {
-      const profil = await db.collection('musteriler').doc(user.uid).get();
-      const d = profil.data() || {};
-      document.getElementById('userName').textContent = d.ad || user.email;
-      document.getElementById('userMeta').textContent = [user.email, d.telefon].filter(Boolean).join(' · ');
-    } catch {
-      document.getElementById('userName').textContent = user.email;
-      document.getElementById('userMeta').textContent = user.email;
-    }
+    document.getElementById('phoneOverlay').classList.remove('open');
+    document.getElementById('userName').textContent = data.ad || user.displayName || user.email;
+    document.getElementById('userMeta').textContent = [user.email, data.telefon].filter(Boolean).join(' · ');
     loadTalepler(user.email);
   } else {
     document.getElementById('authSection').style.display = 'block';
     document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('phoneOverlay').classList.remove('open');
   }
 });
 
-// GİRİŞ
+// EMAIL GİRİŞ
 async function loginMusteri() {
   const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
+  const pass = document.getElementById('loginPassword').value;
   const btn = document.getElementById('loginBtn');
   const errEl = document.getElementById('loginError');
   errEl.style.display = 'none';
-
-  if (!email || !password) {
-    errEl.textContent = 'E-posta ve şifrenizi girin.';
-    errEl.style.display = 'block';
-    return;
-  }
-  btn.disabled = true;
-  btn.textContent = 'Giriş yapılıyor...';
+  if (!email || !pass) { errEl.textContent = 'E-posta ve şifrenizi girin.'; errEl.style.display = 'block'; return; }
+  btn.disabled = true; btn.textContent = 'Giriş yapılıyor...';
   try {
-    await auth.signInWithEmailAndPassword(email, password);
+    await auth.signInWithEmailAndPassword(email, pass);
   } catch (e) {
     const msgs = {
-      'auth/user-not-found': 'Bu e-posta ile kayıtlı hesap bulunamadı. Kayıt olun.',
+      'auth/user-not-found': 'Hesap bulunamadı. Kayıt olun.',
       'auth/wrong-password': 'Şifre hatalı.',
       'auth/invalid-credential': 'E-posta veya şifre hatalı.',
-      'auth/invalid-email': 'Geçersiz e-posta adresi.',
-      'auth/too-many-requests': 'Çok fazla deneme. Lütfen bekleyin.',
+      'auth/invalid-email': 'Geçersiz e-posta.',
+      'auth/too-many-requests': 'Çok fazla deneme. Bekleyin.',
     };
     errEl.textContent = msgs[e.code] || 'Giriş başarısız.';
     errEl.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = '🔓 Giriş Yap';
+    btn.disabled = false; btn.textContent = '🔓 Giriş Yap';
   }
 }
 
-// KAYIT
+// GOOGLE GİRİŞ
+async function googleGiris() {
+  const btns = document.querySelectorAll('.google-btn');
+  btns.forEach(b => { b.disabled = true; b.textContent = 'Yönlendiriliyor...'; });
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    const result = await auth.signInWithPopup(provider);
+    // Profil yoksa oluştur (ad bilgisini Google'dan al)
+    const profil = await db.collection('musteriler').doc(result.user.uid).get();
+    if (!profil.exists) {
+      await db.collection('musteriler').doc(result.user.uid).set({
+        ad: result.user.displayName || '',
+        email: result.user.email,
+        telefon: '',
+        olusturma: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+    // onAuthStateChanged telefon kontrolünü yapacak
+  } catch (e) {
+    if (e.code !== 'auth/popup-closed-by-user') {
+      const errEl = document.getElementById('loginError');
+      errEl.textContent = 'Google girişi başarısız. Tekrar deneyin.';
+      errEl.style.display = 'block';
+    }
+    btns.forEach(b => { b.disabled = false; });
+    // reset button text
+    document.getElementById('googleLoginBtn').innerHTML = googleBtnHTML('Google ile Giriş Yap');
+    document.getElementById('googleRegisterBtn').innerHTML = googleBtnHTML('Google ile Kayıt Ol');
+  }
+}
+
+function googleBtnHTML(text) {
+  return `<svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>${text}`;
+}
+
+// TELEFON KAYDET (Google sonrası)
+async function kaydetTelefon() {
+  const telefon = document.getElementById('phoneInput').value.trim();
+  const btn = document.getElementById('phoneBtn');
+  const errEl = document.getElementById('phoneError');
+  errEl.style.display = 'none';
+  if (!telefon) { errEl.textContent = 'Telefon numarası zorunludur.'; errEl.style.display = 'block'; return; }
+  btn.disabled = true; btn.textContent = 'Kaydediliyor...';
+  try {
+    const user = auth.currentUser;
+    await db.collection('musteriler').doc(user.uid).update({ telefon });
+    document.getElementById('phoneOverlay').classList.remove('open');
+    // onAuthStateChanged tekrar tetiklenmiyor, manuel olarak dashboard göster
+    const profil = await db.collection('musteriler').doc(user.uid).get();
+    const data = profil.data();
+    document.getElementById('authSection').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('userName').textContent = data.ad || user.displayName || user.email;
+    document.getElementById('userMeta').textContent = [user.email, data.telefon].filter(Boolean).join(' · ');
+    loadTalepler(user.email);
+  } catch (e) {
+    errEl.textContent = 'Kayıt başarısız. Tekrar deneyin.'; errEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = '💾 Kaydet ve Devam Et';
+  }
+}
+
+// EMAIL KAYIT
 async function registerMusteri() {
   const ad = document.getElementById('regAd').value.trim();
   const email = document.getElementById('regEmail').value.trim();
@@ -239,46 +331,33 @@ async function registerMusteri() {
   const pass2 = document.getElementById('regPassword2').value;
   const btn = document.getElementById('registerBtn');
   const errEl = document.getElementById('registerError');
-  const sucEl = document.getElementById('registerSuccess');
   errEl.style.display = 'none';
-  sucEl.style.display = 'none';
-
   if (!ad) { errEl.textContent = 'Ad soyad zorunludur.'; errEl.style.display = 'block'; return; }
   if (!email) { errEl.textContent = 'E-posta zorunludur.'; errEl.style.display = 'block'; return; }
   if (!telefon) { errEl.textContent = 'Telefon numarası zorunludur.'; errEl.style.display = 'block'; return; }
-  if (pass.length < 6) { errEl.textContent = 'Şifre en az 6 karakter olmalıdır.'; errEl.style.display = 'block'; return; }
+  if (pass.length < 6) { errEl.textContent = 'Şifre en az 6 karakter olmalı.'; errEl.style.display = 'block'; return; }
   if (pass !== pass2) { errEl.textContent = 'Şifreler eşleşmiyor.'; errEl.style.display = 'block'; return; }
-
-  btn.disabled = true;
-  btn.textContent = 'Kayıt yapılıyor...';
-
+  btn.disabled = true; btn.textContent = 'Kayıt yapılıyor...';
   try {
     const cred = await auth.createUserWithEmailAndPassword(email, pass);
-    // Profili Firestore'a kaydet
     await db.collection('musteriler').doc(cred.user.uid).set({
-      ad,
-      email,
-      telefon,
+      ad, email, telefon,
       olusturma: firebase.firestore.FieldValue.serverTimestamp()
     });
-    // onAuthStateChanged dashboard'u açar
   } catch (e) {
     const msgs = {
       'auth/email-already-in-use': 'Bu e-posta zaten kayıtlı. Giriş yapın.',
-      'auth/invalid-email': 'Geçersiz e-posta adresi.',
+      'auth/invalid-email': 'Geçersiz e-posta.',
       'auth/weak-password': 'Şifre çok zayıf.',
     };
-    errEl.textContent = msgs[e.code] || 'Kayıt başarısız. Tekrar deneyin.';
+    errEl.textContent = msgs[e.code] || 'Kayıt başarısız.';
     errEl.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = '✅ Kayıt Ol';
+    btn.disabled = false; btn.textContent = '✅ Kayıt Ol';
   }
 }
 
 // ÇIKIŞ
-async function logoutMusteri() {
-  await auth.signOut();
-}
+async function logoutMusteri() { await auth.signOut(); }
 
 // TALEPLERİ YÜKLE
 async function loadTalepler(email) {
@@ -286,18 +365,15 @@ async function loadTalepler(email) {
   area.innerHTML = '<div class="loading">Talepler yükleniyor...</div>';
   try {
     const snap = await db.collection('projeler').where('musteri_email', '==', email).orderBy('olusturma', 'desc').get();
-
     if (snap.empty) {
       area.innerHTML = `<div class="empty"><div class="e-icon">📭</div><p>Henüz gönderilmiş talebiniz yok.</p><p style="font-size:0.82rem;margin-top:0.5rem;color:var(--text-dim);"><a href="index.html#teklif-formu" style="color:var(--accent);">Teklif formu</a>nu doldurarak talep oluşturabilirsiniz.</p></div>`;
       return;
     }
-
     let html = `<div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;">${snap.size} talep bulundu:</div>`;
     for (const doc of snap.docs) {
       const p = doc.data();
       const teklifSnap = await db.collection('projeler').doc(doc.id).collection('teklifler').orderBy('olusturma', 'desc').get();
       const teklifler = teklifSnap.docs.map(d => d.data());
-
       html += `<div class="talep-kart">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;">
           <div class="baslik">${p.baslik || 'Başlıksız Talep'}</div>
@@ -312,20 +388,19 @@ async function loadTalepler(email) {
         ${teklifler.length ? `
           <div class="divider"></div>
           <div style="font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--accent);margin-bottom:0.5rem;">📋 Gönderilen Teklif${teklifler.length > 1 ? 'ler' : ''}</div>
-          ${teklifler.map(t => `
-            <div class="teklif-box">
-              <div class="label">Fiyat Teklifi</div>
-              <div class="fiyat">${Number(t.fiyat).toLocaleString('tr-TR')} ${t.para_birimi || 'TRY'}</div>
-              ${t.teslim_gun ? `<div class="teslim">⏱️ Tahmini teslim: ${t.teslim_gun} iş günü</div>` : ''}
-              ${t.notlar ? `<div class="not">💬 ${t.notlar}</div>` : ''}
-            </div>`).join('')}
+          ${teklifler.map(t => `<div class="teklif-box">
+            <div class="label">Fiyat Teklifi</div>
+            <div class="fiyat">${Number(t.fiyat).toLocaleString('tr-TR')} ${t.para_birimi || 'TRY'}</div>
+            ${t.teslim_gun ? `<div class="teslim">⏱️ Tahmini teslim: ${t.teslim_gun} iş günü</div>` : ''}
+            ${t.notlar ? `<div class="not">💬 ${t.notlar}</div>` : ''}
+          </div>`).join('')}
         ` : p.durum === 'yeni' || p.durum === 'inceleniyor' ? `<div style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-muted);">⏳ Teklifiniz hazırlanıyor, 48 saat içinde bilgilendirileceksiniz.</div>` : ''}
       </div>`;
     }
     area.innerHTML = html;
   } catch (e) {
     console.error(e);
-    area.innerHTML = '<p style="color:var(--danger);font-size:0.9rem;text-align:center;">Talepler yüklenemedi. Lütfen tekrar deneyin.</p>';
+    area.innerHTML = '<p style="color:var(--danger);font-size:0.9rem;text-align:center;">Talepler yüklenemedi.</p>';
   }
 }
 </script>
