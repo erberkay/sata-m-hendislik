@@ -96,6 +96,31 @@ function resetForm() {
   if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '<span>📨 Teklif Talebini Gönder</span>'; }
 }
 
+// İLETİŞİM BİLGİLERİ — Firestore'dan yükle
+(async () => {
+  try {
+    const doc = await db.collection('ayarlar').doc('iletisim').get();
+    if (!doc.exists) return;
+    const d = doc.data();
+    if (d.telefon) {
+      const link = document.getElementById('info-telefon-link');
+      if (link) { link.textContent = d.telefon; link.href = 'tel:' + d.telefon.replace(/\s/g, ''); }
+    }
+    if (d.email) {
+      const link = document.getElementById('info-email-link');
+      if (link) { link.textContent = d.email; link.href = 'mailto:' + d.email; }
+    }
+    if (d.adres) {
+      const el = document.getElementById('info-adres');
+      if (el) el.textContent = d.adres;
+    }
+    if (d.saat) {
+      const el = document.getElementById('info-saat');
+      if (el) el.textContent = d.saat;
+    }
+  } catch (e) { /* sessiz hata — varsayılan değerler göster */ }
+})();
+
 // SCROLL ANİMASYONLAR
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; } });

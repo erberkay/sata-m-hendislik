@@ -189,6 +189,8 @@
       <div class="nav-item" onclick="showPage('projeler','tamamlandi');closeSidebar()"><span class="icon">✅</span> Tamamlananlar</div>
       <div class="nav-section-label" style="margin-top:1rem;">Müşteriler</div>
       <div class="nav-item" onclick="showPage('musteriler');closeSidebar()" id="nav-musteriler"><span class="icon">👥</span> Kayıtlı Müşteriler</div>
+      <div class="nav-section-label" style="margin-top:1rem;">Ayarlar</div>
+      <div class="nav-item" onclick="showPage('iletisim');closeSidebar()" id="nav-iletisim"><span class="icon">📞</span> İletişim Bilgileri</div>
     </nav>
     <div class="sidebar-footer">
       <button class="logout-btn" onclick="logout()"><span>🚪</span> Çıkış Yap</button>
@@ -236,6 +238,34 @@
             <h2>Kayıtlı Müşteriler</h2>
           </div>
           <div id="musterilerBody"></div>
+        </div>
+      </div>
+      <!-- İLETİŞİM AYARLARI -->
+      <div id="page-iletisim" style="display:none;">
+        <div class="table-container" style="max-width:560px;">
+          <div class="table-header"><h2>İletişim Bilgileri</h2></div>
+          <div style="padding:1.5rem;display:flex;flex-direction:column;gap:1.1rem;">
+            <div>
+              <label style="display:block;font-size:0.8rem;font-weight:600;color:var(--text-muted);margin-bottom:0.4rem;">📞 Telefon</label>
+              <input id="ib-telefon" type="tel" placeholder="+90 (5xx) xxx xx xx" style="width:100%;padding:0.7rem 0.9rem;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.9rem;box-sizing:border-box;">
+            </div>
+            <div>
+              <label style="display:block;font-size:0.8rem;font-weight:600;color:var(--text-muted);margin-bottom:0.4rem;">✉️ E-posta</label>
+              <input id="ib-email" type="email" placeholder="info@satamuhendislik.com" style="width:100%;padding:0.7rem 0.9rem;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.9rem;box-sizing:border-box;">
+            </div>
+            <div>
+              <label style="display:block;font-size:0.8rem;font-weight:600;color:var(--text-muted);margin-bottom:0.4rem;">📍 Adres</label>
+              <input id="ib-adres" type="text" placeholder="İstanbul, Türkiye" style="width:100%;padding:0.7rem 0.9rem;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.9rem;box-sizing:border-box;">
+            </div>
+            <div>
+              <label style="display:block;font-size:0.8rem;font-weight:600;color:var(--text-muted);margin-bottom:0.4rem;">🕒 Çalışma Saatleri</label>
+              <input id="ib-saat" type="text" placeholder="Hafta içi: 08:00 - 18:00" style="width:100%;padding:0.7rem 0.9rem;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.9rem;box-sizing:border-box;">
+            </div>
+            <div style="display:flex;gap:0.75rem;align-items:center;">
+              <button id="iletisimSaveBtn" onclick="saveIletisim()" style="padding:0.7rem 1.5rem;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:0.9rem;font-weight:600;cursor:pointer;">💾 Kaydet</button>
+              <span id="iletisimMsg" style="font-size:0.85rem;display:none;"></span>
+            </div>
+          </div>
         </div>
       </div>
       <!-- PROJELER -->

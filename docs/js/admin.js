@@ -53,7 +53,7 @@ function showPage(page, filter) {
   document.getElementById(`page-${page}`).style.display = 'block';
   const navEl = document.getElementById(`nav-${page}`);
   if (navEl) navEl.classList.add('active');
-  const titles = { dashboard: 'Dashboard', projeler: 'Talepler', musteriler: 'Kayıtlı Müşteriler' };
+  const titles = { dashboard: 'Dashboard', projeler: 'Talepler', musteriler: 'Kayıtlı Müşteriler', iletisim: 'İletişim Bilgileri' };
   document.getElementById('pageTitle').textContent = titles[page] || page;
   if (page === 'projeler') {
     currentFilter = filter || '';
@@ -66,6 +66,8 @@ function showPage(page, filter) {
     if (activeBtn) activeBtn.classList.add('active');
   } else if (page === 'musteriler') {
     loadMusteriler();
+  } else if (page === 'iletisim') {
+    loadIletisim();
   } else {
     loadDashboard();
   }
@@ -150,6 +152,44 @@ async function loadMusteriler() {
   } catch (e) {
     console.error(e);
     body.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--danger);">Yüklenemedi.</div>';
+  }
+}
+
+// ===== İLETİŞİM AYARLARI =====
+async function loadIletisim() {
+  try {
+    const doc = await db.collection('ayarlar').doc('iletisim').get();
+    if (doc.exists) {
+      const d = doc.data();
+      document.getElementById('ib-telefon').value = d.telefon || '';
+      document.getElementById('ib-email').value = d.email || '';
+      document.getElementById('ib-adres').value = d.adres || '';
+      document.getElementById('ib-saat').value = d.saat || '';
+    }
+  } catch (e) { console.error(e); }
+}
+
+async function saveIletisim() {
+  const btn = document.getElementById('iletisimSaveBtn');
+  const msg = document.getElementById('iletisimMsg');
+  btn.disabled = true; btn.textContent = 'Kaydediliyor...';
+  msg.style.display = 'none';
+  try {
+    await db.collection('ayarlar').doc('iletisim').set({
+      telefon: document.getElementById('ib-telefon').value.trim(),
+      email: document.getElementById('ib-email').value.trim(),
+      adres: document.getElementById('ib-adres').value.trim(),
+      saat: document.getElementById('ib-saat').value.trim(),
+      guncelleme: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    msg.style.display = 'inline'; msg.style.color = 'var(--success)'; msg.textContent = '✅ Kaydedildi';
+    toast('success', 'İletişim bilgileri güncellendi');
+  } catch (e) {
+    console.error(e);
+    msg.style.display = 'inline'; msg.style.color = 'var(--danger)'; msg.textContent = '❌ Kaydedilemedi';
+  } finally {
+    btn.disabled = false; btn.innerHTML = '💾 Kaydet';
+    setTimeout(() => { msg.style.display = 'none'; }, 3000);
   }
 }
 
