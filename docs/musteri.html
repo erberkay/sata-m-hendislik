@@ -124,36 +124,36 @@
 
     <!-- GİRİŞ -->
     <div id="loginForm">
-      <div class="auth-form">
-        <input type="email" id="loginEmail" placeholder="E-posta adresiniz" autocomplete="email">
-        <input type="password" id="loginPassword" placeholder="Şifreniz" autocomplete="current-password" onkeydown="if(event.key==='Enter')loginMusteri()">
+      <form class="auth-form" onsubmit="loginMusteri();return false;" autocomplete="on">
+        <input type="email" id="loginEmail" name="email" placeholder="E-posta adresiniz" autocomplete="email">
+        <input type="password" id="loginPassword" name="password" placeholder="Şifreniz" autocomplete="current-password">
         <div class="auth-error" id="loginError"></div>
-        <button class="submit-btn" id="loginBtn" onclick="loginMusteri()">🔓 Giriş Yap</button>
+        <button type="submit" class="submit-btn" id="loginBtn">🔓 Giriş Yap</button>
         <div class="divider-or">veya</div>
-        <button class="google-btn" id="googleLoginBtn" onclick="googleGiris()">
+        <button type="button" class="google-btn" id="googleLoginBtn" onclick="googleGiris()">
           <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
           Google ile Giriş Yap
         </button>
-      </div>
+      </form>
     </div>
 
     <!-- KAYIT -->
     <div id="registerForm" style="display:none;">
-      <div class="auth-form">
-        <input type="text" id="regAd" placeholder="Ad Soyad *" autocomplete="name">
-        <input type="email" id="regEmail" placeholder="E-posta adresiniz *" autocomplete="email">
-        <input type="tel" id="regTelefon" placeholder="Telefon numaranız * (05xx xxx xx xx)" autocomplete="tel">
+      <form class="auth-form" onsubmit="registerMusteri();return false;" autocomplete="on">
+        <input type="text" id="regAd" name="name" placeholder="Ad Soyad *" autocomplete="name">
+        <input type="email" id="regEmail" name="email" placeholder="E-posta adresiniz *" autocomplete="email">
+        <input type="tel" id="regTelefon" name="tel" placeholder="Telefon numaranız * (05xx xxx xx xx)" autocomplete="tel">
         <p class="field-hint">📞 Sizinle iletişime geçebilmemiz için gereklidir.</p>
-        <input type="password" id="regPassword" placeholder="Şifre (en az 6 karakter) *" autocomplete="new-password">
-        <input type="password" id="regPassword2" placeholder="Şifreyi tekrar girin *" autocomplete="new-password" onkeydown="if(event.key==='Enter')registerMusteri()">
+        <input type="password" id="regPassword" name="password" placeholder="Şifre (en az 6 karakter) *" autocomplete="new-password">
+        <input type="password" id="regPassword2" name="password2" placeholder="Şifreyi tekrar girin *" autocomplete="new-password">
         <div class="auth-error" id="registerError"></div>
-        <button class="submit-btn" id="registerBtn" onclick="registerMusteri()">✅ Kayıt Ol</button>
+        <button type="submit" class="submit-btn" id="registerBtn">✅ Kayıt Ol</button>
         <div class="divider-or">veya</div>
-        <button class="google-btn" id="googleRegisterBtn" onclick="googleGiris()">
+        <button type="button" class="google-btn" id="googleRegisterBtn" onclick="googleGiris()">
           <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
           Google ile Kayıt Ol
         </button>
-      </div>
+      </form>
     </div>
   </div>
 
@@ -285,30 +285,34 @@ async function loginMusteri() {
   }
 }
 
-// GOOGLE GİRİŞ — sadece auth popup, Firestore işlemleri onAuthStateChanged'da
+// GOOGLE GİRİŞ — signInWithRedirect kullan (COOP/popup sorunu yaşanan GitHub Pages için)
 async function googleGiris() {
-  const btns = document.querySelectorAll('.google-btn');
-  btns.forEach(b => { b.disabled = true; b.style.opacity = '0.6'; });
   try {
     const provider = new firebase.auth.GoogleAuthProvider();
-    await auth.signInWithPopup(provider);
-    // onAuthStateChanged tüm profil ve yönlendirme işlemlerini yapacak
+    await auth.signInWithRedirect(provider);
+    // Sayfa Google'a yönlendirilecek, geri dönünce getRedirectResult otomatik çalışır
   } catch (e) {
-    if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
-      const onLogin = document.getElementById('tabLogin').classList.contains('active');
-      const errEl = document.getElementById(onLogin ? 'loginError' : 'registerError');
-      const googleMsgs = {
-        'auth/unauthorized-domain': 'Bu domain Firebase\'de yetkili değil. Firebase Console → Authentication → Settings → Authorized domains kısmına erberkay.github.io ekleyin.',
-        'auth/popup-blocked': 'Popup engellendi. Tarayıcı izinlerini kontrol edin.',
-        'auth/account-exists-with-different-credential': 'Bu e-posta farklı bir yöntemle kayıtlı. E-posta ile giriş yapın.',
-        'auth/network-request-failed': 'Ağ hatası. İnternet bağlantınızı kontrol edin.',
-      };
-      errEl.textContent = googleMsgs[e.code] || ('Google girişi başarısız: ' + (e.code || e.message));
-      errEl.style.display = 'block';
-    }
-    btns.forEach(b => { b.disabled = false; b.style.opacity = '1'; });
+    const errEl = document.getElementById('loginError');
+    errEl.textContent = 'Google girişi başlatılamadı. Sayfayı yenileyip tekrar deneyin.';
+    errEl.style.display = 'block';
   }
 }
+
+// Sayfa yüklenince Google yönlendirme sonucunu yakala
+auth.getRedirectResult().then(result => {
+  // Başarılı redirect: onAuthStateChanged zaten çalışacak
+}).catch(e => {
+  if (e.code && e.code !== 'auth/no-auth-event') {
+    const googleMsgs = {
+      'auth/unauthorized-domain': 'Domain yetkili değil. Firebase Console → Auth → Authorized Domains\'e erberkay.github.io ekleyin.',
+      'auth/account-exists-with-different-credential': 'Bu e-posta farklı bir yöntemle kayıtlı. E-posta ile giriş yapın.',
+      'auth/network-request-failed': 'Ağ hatası. İnternet bağlantınızı kontrol edin.',
+    };
+    const errEl = document.getElementById('loginError');
+    errEl.textContent = googleMsgs[e.code] || ('Google girişi başarısız: ' + e.code);
+    errEl.style.display = 'block';
+  }
+});
 
 
 // TELEFON KAYDET (Google sonrası)
