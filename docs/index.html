@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sata Mühendislik - Çelik İmalat & Konstrüksiyon</title>
+  <meta name="description" content="Çelik konstrüksiyon, merdiven & korkuluk ve kaynak imalat hizmetleri. Projenizi bizimle paylaşın, size özel teklif sunalım.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="#" class="nav-logo">
+    <div class="logo-icon">⚙</div>
+    <div>Sata <span>Mühendislik</span></div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#hakkimizda">Hakkımızda</a></li>
+    <li><a href="#hizmetler">Hizmetler</a></li>
+    <li><a href="#nasil-calisir">Nasıl Çalışır</a></li>
+    <li><a href="#iletisim">İletişim</a></li>
+    <li><a href="#teklif-formu" class="nav-cta">Teklif Al</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-badge">
+        <span>🏭</span> 10+ Yıllık Deneyim
+      </div>
+      <h1>
+        Çelik Projeleriniz<br>
+        için <span class="highlight">Profesyonel</span><br>
+        Çözümler
+      </h1>
+      <p>
+        Konstrüksiyon, merdiven, korkuluk ve özel imalat projelerinizi bizimle paylaşın.
+        En uygun teklifi hızlıca sunuyoruz.
+      </p>
+      <div class="hero-buttons">
+        <a href="#teklif-formu" class="btn-primary">📋 Teklif Al</a>
+        <a href="#hizmetler" class="btn-secondary">Hizmetlerimiz</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="steel-animation">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+        <div class="hero-icon-center">
+          <div class="icon-big">⚙️</div>
+          <p>Çelik İmalat<br>& Konstrüksiyon</p>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-pill"><div class="num">500+</div><div class="lbl">Proje</div></div>
+          <div class="stat-pill"><div class="num">%100</div><div class="lbl">Memnuniyet</div></div>
+          <div class="stat-pill"><div class="num">48s</div><div class="lbl">Teklif Süresi</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Aşağı kaydır</span>
+    <span class="arrow">↓</span>
+  </div>
+</section>
+
+<!-- HAKKIMIZDA -->
+<section id="hakkimizda">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;">
+      <div>
+        <div class="section-label">Hakkımızda</div>
+        <h2 class="section-title">Güvenilir Çelik İmalat Ortağınız</h2>
+        <p class="section-sub">Sata Mühendislik olarak 10 yılı aşkın süredir endüstriyel çelik imalat ve konstrüksiyon sektöründe hizmet veriyoruz.</p>
+        <div style="margin-top:2rem;display:flex;flex-direction:column;gap:1rem;">
+          <div style="display:flex;align-items:center;gap:0.75rem;"><div style="width:32px;height:32px;background:var(--accent-glow);border:1px solid rgba(249,115,22,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;">✓</div><span>TSE onaylı malzeme kullanımı</span></div>
+          <div style="display:flex;align-items:center;gap:0.75rem;"><div style="width:32px;height:32px;background:var(--accent-glow);border:1px solid rgba(249,115,22,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;">✓</div><span>Zamanında teslimat garantisi</span></div>
+          <div style="display:flex;align-items:center;gap:0.75rem;"><div style="width:32px;height:32px;background:var(--accent-glow);border:1px solid rgba(249,115,22,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;">✓</div><span>Anahtar teslim uygulama seçeneği</span></div>
+          <div style="display:flex;align-items:center;gap:0.75rem;"><div style="width:32px;height:32px;background:var(--accent-glow);border:1px solid rgba(249,115,22,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;">✓</div><span>Proje sonrası teknik destek</span></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;text-align:center;"><div style="font-size:2.5rem;font-weight:800;color:var(--accent);">500+</div><div style="color:var(--text-muted);font-size:0.9rem;margin-top:0.25rem;">Tamamlanan Proje</div></div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;text-align:center;margin-top:1.5rem;"><div style="font-size:2.5rem;font-weight:800;color:var(--accent);">10+</div><div style="color:var(--text-muted);font-size:0.9rem;margin-top:0.25rem;">Yıllık Deneyim</div></div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;text-align:center;margin-top:-1.5rem;"><div style="font-size:2.5rem;font-weight:800;color:var(--accent);">48s</div><div style="color:var(--text-muted);font-size:0.9rem;margin-top:0.25rem;">Ortalama Teklif</div></div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;text-align:center;"><div style="font-size:2.5rem;font-weight:800;color:var(--accent);">%98</div><div style="color:var(--text-muted);font-size:0.9rem;margin-top:0.25rem;">Müşteri Memnuniyeti</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HİZMETLER -->
+<section id="hizmetler">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Hizmetlerimiz</div>
+      <h2 class="section-title">Ne Yapıyoruz?</h2>
+      <p class="section-sub">Çelik sektöründe geniş hizmet yelpazemizle her türlü projenize çözüm üretiyoruz.</p>
+    </div>
+    <div class="hizmetler-grid">
+      <div class="hizmet-kart">
+        <div class="hizmet-icon">🏗️</div>
+        <h3>Çelik Konstrüksiyon</h3>
+        <p>Fabrika, depo, hangar ve her türlü endüstriyel yapı için çelik konstrüksiyon tasarım ve imalatı.</p>
+        <ul class="hizmet-list">
+          <li>Çelik çerçeve sistemler</li>
+          <li>Endüstriyel hangar ve depolar</li>
+          <li>Çok katlı çelik yapılar</li>
+          <li>Kule ve platform sistemleri</li>
+        </ul>
+      </div>
+      <div class="hizmet-kart">
+        <div class="hizmet-icon">🪜</div>
+        <h3>Merdiven & Korkuluk</h3>
+        <p>Mimari ve endüstriyel projelere özel, estetik ve dayanıklı çelik merdiven ve korkuluk sistemleri.</p>
+        <ul class="hizmet-list">
+          <li>Paslanmaz çelik korkuluklar</li>
+          <li>Spiral ve düz merdivenler</li>
+          <li>Balkon ve teras korkulukları</li>
+          <li>Cam korkuluk sistemleri</li>
+        </ul>
+      </div>
+      <div class="hizmet-kart">
+        <div class="hizmet-icon">🔧</div>
+        <h3>Kaynak & Özel İmalat</h3>
+        <p>Teknik çizimlere göre özel parça ve ekipman imalatı, profesyonel kaynak işlemleri.</p>
+        <ul class="hizmet-list">
+          <li>Özel profil ve parça imalatı</li>
+          <li>MIG/TIG kaynak işlemleri</li>
+          <li>Makine gövdesi imalatı</li>
+          <li>Saha uygulama ve montaj</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NASIL ÇALIŞIR -->
+<section id="nasil-calisir">
+  <div class="container">
+    <div class="section-header" style="text-align:center;">
+      <div class="section-label">Süreç</div>
+      <h2 class="section-title">Nasıl Çalışır?</h2>
+      <p class="section-sub" style="margin:0 auto;">Proje talebinden teslimata kadar 4 basit adımda profesyonel hizmet.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-kart"><div class="step-num">📋</div><h3>Proje Formu Doldurun</h3><p>Projenizin detaylarını, ölçülerini ve varsa teknik çizimlerinizi form aracılığıyla bize iletin.</p></div>
+      <div class="step-kart"><div class="step-num">🔍</div><h3>İnceleme & Analiz</h3><p>Uzman ekibimiz projenizi detaylı inceler, gerekirse sizinle iletişime geçer.</p></div>
+      <div class="step-kart"><div class="step-num">💰</div><h3>Teklif Sunumu</h3><p>48 saat içinde fiyat, teslim süresi ve teknik detayları içeren özel teklifinizi alırsınız.</p></div>
+      <div class="step-kart"><div class="step-num">🏭</div><h3>Üretim & Teslimat</h3><p>Onaylanan proje üretim sürecine girer, zamanında ve kaliteli şekilde teslim edilir.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEKLİF FORMU -->
+<section id="teklif-formu">
+  <div class="container">
+    <div class="section-header" style="text-align:center;margin-bottom:2.5rem;">
+      <div class="section-label">Teklif</div>
+      <h2 class="section-title">Projenizi Bizimle Paylaşın</h2>
+      <p class="section-sub" style="margin:0 auto;">Formu doldurmanız yeterli. 48 saat içinde size özel teklif hazırlıyoruz.</p>
+    </div>
+    <div class="form-wrapper" style="max-width:860px;margin:0 auto;">
+      <div class="form-header">
+        <h2>Teklif Talep Formu</h2>
+        <p>Tüm alanları eksiksiz doldurun, daha hızlı ve doğru teklif alın</p>
+      </div>
+      <div class="form-body">
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">✅</div>
+          <h3>Talebiniz Alındı!</h3>
+          <p>En kısa sürede (max 48 saat) ekibimiz sizinle iletişime geçecek ve özel teklifinizi sunacaktır.</p>
+          <button class="btn-primary" style="margin-top:1.5rem;" onclick="resetForm()">Yeni Talep Oluştur</button>
+        </div>
+
+        <form id="teklifForm">
+          <div class="form-section">
+            <div class="form-section-title">📦 Proje Bilgileri</div>
+            <div class="form-grid cols-1">
+              <div class="form-group">
+                <label>Proje Başlığı <span class="req">*</span></label>
+                <input type="text" name="proje_baslik" placeholder="ör: Fabrika merdiveni ve korkuluğu imalatı" required>
+              </div>
+            </div>
+            <div class="form-grid" style="margin-top:1rem;">
+              <div class="form-group">
+                <label>Kategori <span class="req">*</span></label>
+                <select name="kategori" required>
+                  <option value="">Kategori seçin...</option>
+                  <option value="Çelik Konstrüksiyon">🏗️ Çelik Konstrüksiyon</option>
+                  <option value="Merdiven & Korkuluk">🪜 Merdiven & Korkuluk</option>
+                  <option value="Kaynak & Özel İmalat">🔧 Kaynak & Özel İmalat</option>
+                  <option value="Diğer">Diğer</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Beklenen Bütçe</label>
+                <select name="butce">
+                  <option value="Belirtmek istemiyorum">Belirtmek istemiyorum</option>
+                  <option value="50.000 TL altı">50.000 TL altı</option>
+                  <option value="50.000 - 100.000 TL">50.000 - 100.000 TL</option>
+                  <option value="100.000 - 250.000 TL">100.000 - 250.000 TL</option>
+                  <option value="250.000 - 500.000 TL">250.000 - 500.000 TL</option>
+                  <option value="500.000 TL üzeri">500.000 TL üzeri</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-grid cols-1" style="margin-top:1rem;">
+              <div class="form-group">
+                <label>Proje Açıklaması</label>
+                <textarea name="aciklama" placeholder="Projenizle ilgili detayları paylaşın. Malzeme tercihleri, kullanım amacı, özel gereksinimler vb."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">📐 Ölçüler & Miktar</div>
+            <div class="form-grid cols-3">
+              <div class="form-group">
+                <label>Genişlik (metre)</label>
+                <input type="number" name="genislik_m" placeholder="ör: 5.5" step="0.01" min="0">
+              </div>
+              <div class="form-group">
+                <label>Yükseklik (metre)</label>
+                <input type="number" name="yukseklik_m" placeholder="ör: 3.2" step="0.01" min="0">
+              </div>
+              <div class="form-group">
+                <label>Uzunluk/Derinlik (metre)</label>
+                <input type="number" name="uzunluk_m" placeholder="ör: 8.0" step="0.01" min="0">
+              </div>
+            </div>
+            <div class="form-grid" style="margin-top:1rem;">
+              <div class="form-group">
+                <label>Adet</label>
+                <input type="number" name="adet" placeholder="1" min="1" value="1">
+              </div>
+              <div class="form-group">
+                <label>Şehir</label>
+                <input type="text" name="sehir" placeholder="ör: İstanbul">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">👤 İletişim Bilgileri</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Ad Soyad <span class="req">*</span></label>
+                <input type="text" name="ad_soyad" placeholder="Adınız ve soyadınız" required>
+              </div>
+              <div class="form-group">
+                <label>Telefon</label>
+                <input type="tel" name="telefon" placeholder="0532 000 00 00">
+              </div>
+            </div>
+            <div class="form-grid cols-1" style="margin-top:1rem;">
+              <div class="form-group">
+                <label>E-posta <span class="req">*</span></label>
+                <input type="email" name="email" placeholder="ornek@email.com" required>
+                <span class="hint">Teklifiniz bu adrese de gönderilecektir</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">📎 Teknik Çizim & Fotoğraflar</div>
+            <div class="form-group">
+              <label>Dosya Ekle</label>
+              <div class="file-drop" id="fileDrop">
+                <input type="file" id="fileInput" multiple accept=".jpg,.jpeg,.png,.gif,.pdf,.dwg,.dxf">
+                <div class="drop-icon">📁</div>
+                <div class="drop-text">Dosyaları sürükleyin veya <span>tıklayın</span><br><small style="color:var(--text-dim);">JPG, PNG, PDF, DWG — max 10MB</small></div>
+              </div>
+              <div class="file-preview" id="filePreview"></div>
+              <div id="uploadProgress" style="display:none;margin-top:0.5rem;">
+                <div style="background:var(--border);border-radius:4px;height:4px;overflow:hidden;">
+                  <div id="progressBar" style="height:100%;background:var(--accent);width:0%;transition:width 0.3s;"></div>
+                </div>
+                <p style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;" id="progressText">Dosyalar yükleniyor...</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-submit">
+            <button type="submit" class="btn-submit" id="submitBtn">
+              <span>📨 Teklif Talebini Gönder</span>
+            </button>
+            <p style="margin-top:1rem;font-size:0.8rem;color:var(--text-dim);">
+              Bilgileriniz gizli tutulur ve yalnızca teklif sürecinde kullanılır.
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- İLETİŞİM -->
+<section id="iletisim">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">İletişim</div>
+      <h2 class="section-title">Bize Ulaşın</h2>
+      <p class="section-sub">Sorularınız için doğrudan iletişime geçebilirsiniz.</p>
+    </div>
+    <div class="iletisim-grid">
+      <div class="iletisim-kart">
+        <div class="iletisim-item">
+          <div class="iletisim-icon">📞</div>
+          <div><h4>Telefon</h4><p>+90 (xxx) xxx xx xx</p></div>
+        </div>
+        <div class="iletisim-item">
+          <div class="iletisim-icon">✉️</div>
+          <div><h4>E-posta</h4><p>info@satamuhendislik.com</p></div>
+        </div>
+        <div class="iletisim-item">
+          <div class="iletisim-icon">📍</div>
+          <div><h4>Adres</h4><p>İstanbul, Türkiye</p></div>
+        </div>
+        <div class="iletisim-item">
+          <div class="iletisim-icon">🕒</div>
+          <div><h4>Çalışma Saatleri</h4><p>Hafta içi: 08:00 - 18:00</p></div>
+        </div>
+      </div>
+      <div class="map-placeholder">
+        <span style="font-size:2rem;">🗺️</span>
+        <p>Harita entegrasyonu</p>
+        <small style="color:var(--text-dim);">Google Maps eklenecek</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo" style="margin-bottom:0;">
+        <div class="logo-icon">⚙</div>
+        <div>Sata <span style="color:var(--accent);">Mühendislik</span></div>
+      </div>
+      <p>Çelik konstrüksiyon ve özel imalat alanında güvenilir çözüm ortağınız.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Hizmetler</h4>
+      <ul>
+        <li><a href="#hizmetler">Çelik Konstrüksiyon</a></li>
+        <li><a href="#hizmetler">Merdiven & Korkuluk</a></li>
+        <li><a href="#hizmetler">Kaynak & İmalat</a></li>
+        <li><a href="#teklif-formu">Teklif Al</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Şirket</h4>
+      <ul>
+        <li><a href="#hakkimizda">Hakkımızda</a></li>
+        <li><a href="#nasil-calisir">Nasıl Çalışır</a></li>
+        <li><a href="#iletisim">İletişim</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Sata Mühendislik. Tüm hakları saklıdır.</span>
+    <span>Çelik İmalat & Konstrüksiyon</span>
+  </div>
+</footer>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
