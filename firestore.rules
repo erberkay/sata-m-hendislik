@@ -2,28 +2,49 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Admin kontrolü: ayarlar/config → adminEmails listesinde user.email var mı?
+    function isAdmin() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/ayarlar/config)
+        && request.auth.token.email in get(/databases/$(database)/documents/ayarlar/config).data.adminEmails;
+    }
+
     // Projeler (teklif talepleri)
     match /projeler/{projeId} {
-      allow create: if true; // herkes form gönderebilir
-      allow read: if request.auth != null;
-      allow update, delete: if request.auth != null;
+      // Herkes form gönderebilir (giriş gerekmez)
+      allow create: if true;
+      // Admin tümünü, müşteri yalnızca kendi projesini okuyabilir
+      allow read: if isAdmin()
+        || (request.auth != null && resource.data.musteri_email == request.auth.token.email);
+      // Admin tümünü güncelleyebilir, müşteri yalnızca kendi projesini
+      allow update, delete: if isAdmin()
+        || (request.auth != null && resource.data.musteri_email == request.auth.token.email);
 
+      // Teklifler (sub-collection)
       match /teklifler/{teklifId} {
-        allow read: if request.auth != null;
-        allow write: if request.auth != null;
+        // Admin veya projenin sahibi okuyabilir
+        allow read: if isAdmin()
+          || (request.auth != null
+              && get(/databases/$(database)/documents/projeler/$(projeId)).data.musteri_email == request.auth.token.email);
+        // Yalnızca admin yazabilir
+        allow write: if isAdmin();
       }
     }
 
-    // Müşteri profilleri (kayıt olan müşteriler)
+    // Müşteri profilleri
     match /musteriler/{uid} {
+      // Kullanıcı kendi profilini oluşturabilir/güncelleyebilir
       allow create, update: if request.auth != null && request.auth.uid == uid;
-      allow read: if request.auth != null; // admin de okuyabilir
+      // Admin tümünü, müşteri yalnızca kendi profilini okuyabilir
+      allow read: if isAdmin() || (request.auth != null && request.auth.uid == uid);
     }
 
     // Site ayarları (iletişim bilgileri vb.)
     match /ayarlar/{docId} {
-      allow read: if true; // herkes okuyabilir (site ziyaretçileri)
-      allow write: if request.auth != null; // sadece admin yazabilir
+      // Herkes okuyabilir (site ziyaretçileri iletişim bilgilerini görür)
+      allow read: if true;
+      // Yalnızca admin yazabilir
+      allow write: if isAdmin();
     }
   }
 }
