@@ -16,8 +16,27 @@ function toast(type, msg) {
 }
 
 // ===== AUTH =====
-auth.onAuthStateChanged(user => {
+auth.onAuthStateChanged(async user => {
   if (user) {
+    // Admin yetki kontrolü: ayarlar/config → adminEmails dizisinde user.email olmalı
+    try {
+      const cfgDoc = await db.collection('ayarlar').doc('config').get();
+      const adminEmails = cfgDoc.exists ? (cfgDoc.data().adminEmails || []) : [];
+      if (!adminEmails.includes(user.email)) {
+        await auth.signOut();
+        const errEl = document.getElementById('loginError');
+        errEl.textContent = 'Bu hesabın admin yetkisi yok.';
+        errEl.style.display = 'block';
+        return;
+      }
+    } catch (e) {
+      // Kural okuma hatası → güvenli tarafta kal, çıkış yap
+      await auth.signOut();
+      const errEl = document.getElementById('loginError');
+      errEl.textContent = 'Yetki kontrolü başarısız. Tekrar deneyin.';
+      errEl.style.display = 'block';
+      return;
+    }
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminApp').style.display = 'flex';
     startRealtime();

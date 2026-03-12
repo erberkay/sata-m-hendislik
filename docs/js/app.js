@@ -105,6 +105,12 @@ function resetForm() {
     if (d.telefon) {
       const link = document.getElementById('info-telefon-link');
       if (link) { link.textContent = d.telefon; link.href = 'tel:' + d.telefon.replace(/\s/g, ''); }
+      // WhatsApp floating button href'ini de güncelle
+      const wa = document.getElementById('whatsapp-fab');
+      if (wa) {
+        const num = d.telefon.replace(/\D/g, '').replace(/^0/, '90');
+        wa.href = 'https://wa.me/' + num + '?text=Merhaba%2C%20proje%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum.';
+      }
     }
     if (d.email) {
       const link = document.getElementById('info-email-link');
