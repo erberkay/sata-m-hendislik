@@ -97,6 +97,8 @@ input, textarea, select, button { font-family: inherit; }
 
 /* Sadece mobil/desktop göster */
 .mob-only { display: none; }
+.nav-links .nav-section,
+.nav-links .nav-divider { display: none; }
 
 /* Nav utils — Müşteri & Admin butonları, her zaman görünür */
 .nav-utils {
@@ -861,38 +863,76 @@ footer {
 @media (max-width: 768px) {
   /* Navbar */
   .hamburger { display: flex; }
-  /* Mobilde desk-only gizle, mob-only göster */
+  /* Mobilde desk-only gizle, mob-only / section göster */
   .desk-only { display: none !important; }
   .mob-only { display: block; }
+  .nav-links .nav-section { display: block; }
+  .nav-links .nav-divider { display: block; }
   .nav-links {
     display: none;
     position: fixed;
-    top: 70px; left: 0; right: 0; bottom: 80px;
+    top: 70px; left: 0; right: 0;
     background: var(--bg-card);
     border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
     flex-direction: column;
-    padding: 1.5rem 1.25rem;
-    gap: 0.4rem;
+    padding: 0.75rem 1rem;
+    gap: 0;
     overflow-y: auto;
+    max-height: calc(100vh - 70px);
     z-index: 99;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
   }
   .nav-links.open { display: flex; }
-  .nav-links li a {
-    display: block;
-    padding: 0.85rem 1rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    color: var(--text) !important;
-    border: 1px solid transparent;
+
+  /* Bölüm etiketi: Menü başlıkları */
+  .nav-links .nav-section {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 0.9rem 0.75rem 0.35rem;
   }
-  .nav-links li a:hover { background: var(--bg-card2); border-color: var(--border); }
+  .nav-links .nav-section:first-child { padding-top: 0.25rem; }
+
+  /* Ayraç çizgi */
+  .nav-links .nav-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0.5rem 0;
+  }
+
+  .nav-links li a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-muted) !important;
+    background: transparent;
+    transition: all 0.15s;
+  }
+  .nav-links li a:hover { background: var(--bg-card2); color: var(--text) !important; }
   .nav-links .nav-cta {
     background: var(--accent) !important;
     color: #fff !important;
-    text-align: center;
-    margin-top: 0.5rem;
-    border-color: var(--accent) !important;
+    font-weight: 700 !important;
+    justify-content: center;
+    margin-top: 0.25rem;
   }
+  .nav-links .nav-cta:hover { background: var(--accent-dark) !important; }
+  /* mob-only items (Müşteri/Admin) farklı görünüm */
+  .nav-links .mob-only a {
+    color: var(--text-muted) !important;
+    background: var(--bg-card2);
+    border: 1px solid var(--border);
+    margin-bottom: 0.4rem;
+    justify-content: center;
+  }
+  .nav-links .mob-only a:hover { border-color: var(--accent); color: var(--text) !important; }
   .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
   .hamburger.open span:nth-child(2) { opacity: 0; }
   .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
