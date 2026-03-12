@@ -3,7 +3,6 @@ let currentFilter = '';
 let currentProjeId = null;
 let allProjeler = [];
 let unsubscribeDashboard = null;
-let unsubscribeProjeler = null;
 
 // ===== TOAST =====
 function toast(type, msg) {
@@ -42,7 +41,6 @@ auth.onAuthStateChanged(async user => {
     startRealtime();
   } else {
     if (unsubscribeDashboard) { unsubscribeDashboard(); unsubscribeDashboard = null; }
-    if (unsubscribeProjeler) { unsubscribeProjeler(); unsubscribeProjeler = null; }
     document.getElementById('loginScreen').style.display = 'flex';
     document.getElementById('adminApp').style.display = 'none';
   }
@@ -53,10 +51,22 @@ async function loginWithEmail() {
   errEl.style.display = 'none';
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
-  if (!email || !password) { errEl.style.display = 'block'; return; }
+  if (!email || !password) {
+    errEl.textContent = 'E-posta ve şifre zorunludur.';
+    errEl.style.display = 'block';
+    return;
+  }
   try {
     await auth.signInWithEmailAndPassword(email, password);
   } catch (e) {
+    const msgs = {
+      'auth/user-not-found': 'Bu e-posta ile kayıtlı hesap yok.',
+      'auth/wrong-password': 'Şifre hatalı.',
+      'auth/invalid-credential': 'E-posta veya şifre hatalı.',
+      'auth/invalid-email': 'Geçersiz e-posta adresi.',
+      'auth/too-many-requests': 'Çok fazla hatalı deneme. Lütfen bekleyin.',
+    };
+    errEl.textContent = msgs[e.code] || 'Giriş başarısız. Tekrar deneyin.';
     errEl.style.display = 'block';
   }
 }
@@ -186,7 +196,11 @@ async function loadIletisim() {
       document.getElementById('ib-adres').value = d.adres || '';
       document.getElementById('ib-saat').value = d.saat || '';
     }
-  } catch (e) { console.error(e); }
+  } catch (e) {
+    console.error(e);
+    const msg = document.getElementById('iletisimMsg');
+    if (msg) { msg.textContent = 'Bilgiler yüklenemedi.'; msg.className = 'save-msg error'; msg.style.display = 'block'; }
+  }
 }
 
 async function saveIletisim() {
@@ -346,7 +360,7 @@ async function durumGuncelle() {
     const proje = allProjeler.find(p => p.id === currentProjeId);
     if (proje) proje.durum = durum;
     loadDashboard();
-  } catch { toast('error', 'Güncelleme başarısız'); }
+  } catch (e) { console.error(e); toast('error', 'Güncelleme başarısız'); }
 }
 
 async function teklifGonder(projeId) {
