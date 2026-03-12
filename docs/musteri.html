@@ -265,6 +265,11 @@ auth.onAuthStateChanged(async user => {
     document.getElementById('authSection').style.display = 'block';
     document.getElementById('dashboard').style.display = 'none';
     document.getElementById('phoneOverlay').classList.remove('open');
+    // Buton state'lerini sıfırla (hata sonrası signOut tetiklenirse donmuş kalmasın)
+    const lb = document.getElementById('loginBtn');
+    if (lb) { lb.disabled = false; lb.textContent = '🔓 Giriş Yap'; }
+    const rb = document.getElementById('registerBtn');
+    if (rb) { rb.disabled = false; rb.textContent = '✅ Kayıt Ol'; }
   }
 });
 

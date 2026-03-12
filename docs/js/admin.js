@@ -283,6 +283,8 @@ async function openProje(id) {
   if (!proje) return;
 
   document.getElementById('modalTitle').textContent = `${esc(proje.baslik)}`;
+  document.getElementById('modalBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--text-muted);">Yükleniyor...</div>';
+  document.getElementById('modalOverlay').classList.add('open');
 
   const olcular = [
     proje.genislik ? `G: ${proje.genislik}m` : null,
@@ -296,8 +298,13 @@ async function openProje(id) {
   }).join('') || '<span style="color:var(--text-dim);font-size:0.85rem;">Dosya eklenmemiş</span>';
 
   // Teklifleri çek
-  const teklifSnap = await db.collection('projeler').doc(id).collection('teklifler').orderBy('olusturma', 'desc').get();
-  const teklifler = teklifSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+  let teklifler = [];
+  try {
+    const teklifSnap = await db.collection('projeler').doc(id).collection('teklifler').orderBy('olusturma', 'desc').get();
+    teklifler = teklifSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (e) {
+    console.error('Teklifler yüklenemedi:', e);
+  }
 
   const durumOptions = ['yeni','inceleniyor','teklif_verildi','kabul_edildi','reddedildi','tamamlandi'];
   const durumTr = { yeni:'Yeni', inceleniyor:'İnceleniyor', teklif_verildi:'Teklif Verildi', kabul_edildi:'Kabul Edildi', reddedildi:'Reddedildi', tamamlandi:'Tamamlandı' };
