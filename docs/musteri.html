@@ -23,7 +23,7 @@
     .top-bar{width:100%;max-width:520px;display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;}
     .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1rem;}
     .logo-icon{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;}
-    .back-btn{color:var(--text-muted);font-size:0.85rem;border:1px solid var(--border);padding:0.35rem 0.75rem;border-radius:7px;transition:all 0.15s;}
+    .back-btn{color:var(--text-muted);font-size:0.875rem;border:1px solid var(--border);padding:0.55rem 0.9rem;border-radius:8px;transition:all 0.15s;min-height:40px;display:inline-flex;align-items:center;}
     .back-btn:hover{color:var(--text);border-color:var(--accent);}
 
     .card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:2.25rem;width:100%;max-width:520px;}
@@ -35,20 +35,20 @@
 
     /* INPUTS */
     .auth-form{display:flex;flex-direction:column;gap:0.75rem;}
-    .auth-form input{background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:0.85rem 1rem;color:var(--text);font-size:0.95rem;font-family:inherit;outline:none;transition:border-color 0.2s;width:100%;}
+    .auth-form input{background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:0.875rem 1rem;color:var(--text);font-size:1rem;font-family:inherit;outline:none;transition:border-color 0.2s;width:100%;min-height:48px;}
     .auth-form input:focus{border-color:var(--accent);}
     .auth-form input::placeholder{color:var(--text-dim);}
     .field-hint{font-size:0.75rem;color:var(--text-dim);margin-top:-0.25rem;}
 
     /* BUTTONS */
-    .submit-btn{background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:0.9rem;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.2s;width:100%;margin-top:0.25rem;}
+    .submit-btn{background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:0.9rem;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.2s;width:100%;margin-top:0.25rem;min-height:48px;}
     .submit-btn:hover{background:var(--accent-dark);}
     .submit-btn:disabled{opacity:0.6;cursor:not-allowed;}
 
     .divider-or{display:flex;align-items:center;gap:0.75rem;margin:0.5rem 0;color:var(--text-dim);font-size:0.8rem;}
     .divider-or::before,.divider-or::after{content:'';flex:1;height:1px;background:var(--border);}
 
-    .google-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:0.75rem;background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:0.85rem;font-size:0.9rem;font-weight:600;color:var(--text);cursor:pointer;font-family:inherit;transition:all 0.2s;}
+    .google-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:0.75rem;background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:0.875rem;font-size:1rem;font-weight:600;color:var(--text);cursor:pointer;font-family:inherit;transition:all 0.2s;min-height:48px;}
     .google-btn:hover{border-color:#4285f4;background:rgba(66,133,244,0.08);}
     .google-btn:disabled{opacity:0.6;cursor:not-allowed;}
     .google-icon{width:20px;height:20px;flex-shrink:0;}
@@ -61,7 +61,7 @@
     .phone-modal{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:2rem;width:100%;max-width:420px;}
     .phone-modal h2{font-size:1.2rem;font-weight:700;margin-bottom:0.5rem;}
     .phone-modal p{color:var(--text-muted);font-size:0.875rem;margin-bottom:1.5rem;line-height:1.6;}
-    .phone-modal input{background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:0.85rem 1rem;color:var(--text);font-size:0.95rem;font-family:inherit;outline:none;width:100%;margin-bottom:0.75rem;transition:border-color 0.2s;}
+    .phone-modal input{background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:0.875rem 1rem;color:var(--text);font-size:1rem;font-family:inherit;outline:none;width:100%;margin-bottom:0.75rem;transition:border-color 0.2s;min-height:48px;}
     .phone-modal input:focus{border-color:var(--accent);}
     .phone-modal .auth-error{margin-bottom:0.5rem;}
 
@@ -305,7 +305,9 @@ async function googleGiris() {
     await auth.signInWithRedirect(provider);
     // Sayfa Google'a yönlendirilecek, geri dönünce getRedirectResult otomatik çalışır
   } catch (e) {
-    const errEl = document.getElementById('loginError');
+    // Aktif tab'a göre doğru hata elementini seç
+    const activeTabId = document.getElementById('tabLogin').classList.contains('active') ? 'loginError' : 'registerError';
+    const errEl = document.getElementById(activeTabId);
     errEl.textContent = 'Google girişi başlatılamadı. Sayfayı yenileyip tekrar deneyin.';
     errEl.style.display = 'block';
   }
@@ -321,6 +323,7 @@ auth.getRedirectResult().then(result => {
       'auth/account-exists-with-different-credential': 'Bu e-posta farklı bir yöntemle kayıtlı. E-posta ile giriş yapın.',
       'auth/network-request-failed': 'Ağ hatası. İnternet bağlantınızı kontrol edin.',
     };
+    // Redirect sonrası her zaman login tab'ında olduğumuz için loginError kullan
     const errEl = document.getElementById('loginError');
     errEl.textContent = googleMsgs[e.code] || ('Google girişi başarısız: ' + e.code);
     errEl.style.display = 'block';
@@ -426,7 +429,15 @@ async function loadTalepler(email) {
             ${t.teslim_gun ? `<div class="teslim">⏱️ Tahmini teslim: ${parseInt(t.teslim_gun)} iş günü</div>` : ''}
             ${t.notlar ? `<div class="not">💬 ${esc(t.notlar)}</div>` : ''}
           </div>`).join('')}
-        ` : p.durum === 'yeni' || p.durum === 'inceleniyor' ? `<div style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-muted);">⏳ Teklifiniz hazırlanıyor, 48 saat içinde bilgilendirileceksiniz.</div>` : ''}
+        ` : p.durum === 'yeni' || p.durum === 'inceleniyor' ? `
+          <div style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-muted);">⏳ Teklifiniz hazırlanıyor, 48 saat içinde bilgilendirileceksiniz.</div>
+        ` : p.durum === 'kabul_edildi' ? `
+          <div style="margin-top:0.75rem;font-size:0.82rem;color:#4ade80;">✅ Teklifiniz kabul edildi. Ekibimiz sizinle iletişime geçecek.</div>
+        ` : p.durum === 'reddedildi' ? `
+          <div style="margin-top:0.75rem;font-size:0.82rem;color:#f87171;">❌ Bu talep için teklif sunulamadı. Yeni bir talep oluşturabilirsiniz.</div>
+        ` : p.durum === 'tamamlandi' ? `
+          <div style="margin-top:0.75rem;font-size:0.82rem;color:#a78bfa;">🏁 Proje tamamlandı. İyi çalışmalar!</div>
+        ` : ''}
       </div>`;
     }
     area.innerHTML = html;

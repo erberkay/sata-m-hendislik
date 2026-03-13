@@ -185,9 +185,9 @@
     <form onsubmit="loginWithEmail();return false;" autocomplete="on">
       <input type="email" id="loginEmail" name="email" placeholder="E-posta" autocomplete="email">
       <input type="password" id="loginPassword" name="password" placeholder="Şifre" autocomplete="current-password">
+      <div class="login-error" id="loginError"></div>
       <button type="submit" class="login-btn">Giriş Yap</button>
     </form>
-    <div class="login-error" id="loginError"></div>
   </div>
 </div>
 
@@ -244,7 +244,9 @@
               <button class="filter-btn" onclick="dashFilter(event,'yeni')">🆕 Yeni</button>
               <button class="filter-btn" onclick="dashFilter(event,'inceleniyor')">🔍 İnceleniyor</button>
               <button class="filter-btn" onclick="dashFilter(event,'teklif_verildi')">💰 Teklif</button>
-              <button class="filter-btn" onclick="dashFilter(event,'tamamlandi')">✅ Tamamlandı</button>
+              <button class="filter-btn" onclick="dashFilter(event,'kabul_edildi')">✅ Kabul</button>
+              <button class="filter-btn" onclick="dashFilter(event,'reddedildi')">❌ Reddedildi</button>
+              <button class="filter-btn" onclick="dashFilter(event,'tamamlandi')">🏁 Tamamlandı</button>
             </div>
           </div>
           <div id="dashboardTableBody"></div>
@@ -298,6 +300,7 @@
               <button class="filter-btn" onclick="filterProjeler(event,'inceleniyor')">🔍 İnceleniyor</button>
               <button class="filter-btn" onclick="filterProjeler(event,'teklif_verildi')">💰 Teklif Verildi</button>
               <button class="filter-btn" onclick="filterProjeler(event,'kabul_edildi')">✅ Kabul</button>
+              <button class="filter-btn" onclick="filterProjeler(event,'reddedildi')">❌ Reddedildi</button>
               <button class="filter-btn" onclick="filterProjeler(event,'tamamlandi')">🏁 Tamamlandı</button>
             </div>
           </div>

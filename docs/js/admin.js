@@ -311,7 +311,7 @@ async function openProje(id) {
 
   const durumOptions = ['yeni','inceleniyor','teklif_verildi','kabul_edildi','reddedildi','tamamlandi'];
   const durumTr = { yeni:'Yeni', inceleniyor:'İnceleniyor', teklif_verildi:'Teklif Verildi', kabul_edildi:'Kabul Edildi', reddedildi:'Reddedildi', tamamlandi:'Tamamlandı' };
-
+  // Modal zaten açık (loading gösteriliyor), içeriği güncelle
   document.getElementById('modalBody').innerHTML = `
     <div class="detail-grid">
       <div class="detail-item"><label>Müşteri</label><p>${esc(proje.musteri_ad)}</p></div>
@@ -358,8 +358,6 @@ async function openProje(id) {
       <button class="action-btn primary" onclick="teklifGonder('${id}')" id="teklifBtn">💰 Teklifi Kaydet</button>
     </div>
   `;
-
-  document.getElementById('modalOverlay').classList.add('open');
 }
 
 async function durumGuncelle() {
