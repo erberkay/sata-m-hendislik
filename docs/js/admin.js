@@ -59,8 +59,11 @@ async function loginWithEmail() {
     errEl.style.display = 'block';
     return;
   }
+  const btn = document.querySelector('#loginScreen .login-btn');
+  btn.disabled = true; btn.textContent = 'Giriş yapılıyor...';
   try {
     await auth.signInWithEmailAndPassword(email, password);
+    // Başarılı: onAuthStateChanged devralır, butonu geri almaya gerek yok
   } catch (e) {
     const msgs = {
       'auth/user-not-found': 'Bu e-posta ile kayıtlı hesap yok.',
@@ -71,6 +74,7 @@ async function loginWithEmail() {
     };
     errEl.textContent = msgs[e.code] || 'Giriş başarısız. Tekrar deneyin.';
     errEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Giriş Yap';
   }
 }
 
