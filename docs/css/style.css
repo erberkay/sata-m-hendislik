@@ -98,7 +98,8 @@ input, textarea, select, button { font-family: inherit; }
 /* Sadece mobil/desktop göster */
 .mob-only { display: none; }
 .nav-links .nav-section,
-.nav-links .nav-divider { display: none; }
+.nav-links .nav-divider,
+.nav-links .nav-divider-2 { display: none; }
 
 /* Nav utils — Müşteri & Admin butonları, her zaman görünür */
 .nav-utils {
@@ -872,23 +873,31 @@ footer {
   .nav-links li a:hover,
   .nav-links li a:active { background: var(--bg-card2); }
 
-  /* Teklif Al — vurgulu buton */
+  /* Teklif Al — mobilde düz link (göz yormayan) */
   .nav-links .nav-cta {
-    background: var(--accent) !important;
-    color: #fff !important;
-    font-weight: 700 !important;
-    justify-content: center;
+    background: transparent !important;
+    color: var(--text) !important;
+    font-weight: 500 !important;
+    justify-content: flex-start;
     min-height: 48px;
-    margin: 0.25rem 0;
+    margin: 0;
     border-radius: 10px;
   }
-  .nav-links .nav-cta:hover { background: var(--accent-dark) !important; }
+  .nav-links .nav-cta:hover { background: var(--bg-card2) !important; }
 
   /* Müşteri / Admin linkleri */
   .nav-links .mob-only a {
     color: var(--text) !important;
     background: transparent;
   }
+
+  /* ── Mobil menü sırası: Teklif Al → Hesap → Gezinti ── */
+  #navTeklif          { order: 1; }
+  .nav-links .nav-divider:not(.nav-divider-2) { order: 2; }
+  .nav-links .nav-section  { order: 3; }
+  .nav-links .mob-only     { order: 4; }
+  .nav-links .nav-divider-2 { order: 5; }
+  .nav-links li:not(#navTeklif):not(.nav-section):not(.nav-divider):not(.mob-only) { order: 6; }
 
   /* Hamburger → X animasyonu */
   .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
