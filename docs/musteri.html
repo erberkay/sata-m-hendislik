@@ -95,6 +95,24 @@
     .teklif-box .not{font-size:0.82rem;color:var(--text-muted);margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--border);}
     .divider{height:1px;background:var(--border);margin:1rem 0;}
 
+    /* KABUL / REDDET */
+    .karar-btns{display:flex;gap:0.6rem;margin-top:0.75rem;flex-wrap:wrap;}
+    .btn-kabul{background:rgba(34,197,94,0.12);color:#4ade80;border:1px solid rgba(34,197,94,0.25);border-radius:8px;padding:0.45rem 1rem;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:inherit;min-height:40px;transition:all 0.15s;}
+    .btn-kabul:hover{background:rgba(34,197,94,0.22);}
+    .btn-reddet{background:rgba(239,68,68,0.08);color:#f87171;border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:0.45rem 1rem;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:inherit;min-height:40px;transition:all 0.15s;}
+    .btn-reddet:hover{background:rgba(239,68,68,0.18);}
+    /* PROFİL DÜZENLE */
+    .profil-bolum{margin-top:1rem;}
+    .profil-box{background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:0.6rem;}
+    .profil-box h3{font-size:0.78rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.85rem;}
+    .profil-form{display:flex;flex-direction:column;gap:0.6rem;}
+    .profil-form input{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:0.7rem 0.9rem;color:var(--text);font-size:1rem;font-family:inherit;outline:none;transition:border-color 0.2s;width:100%;min-height:48px;}
+    .profil-form input:focus{border-color:var(--accent);}
+    .profil-btns{display:flex;gap:0.5rem;margin-top:0.15rem;}
+    .btn-sm{padding:0.45rem 0.9rem;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:inherit;min-height:40px;border:none;}
+    .btn-sm.primary{background:var(--accent);color:#fff;}
+    .btn-sm.secondary{background:transparent;border:1px solid var(--border);color:var(--text-muted);}
+
     @media(max-width:480px){
       body{padding:1rem 0.75rem;}
       .top-bar{margin-bottom:1.25rem;}
@@ -172,8 +190,39 @@
         <div class="user-name" id="userName">—</div>
         <div class="user-meta" id="userMeta">—</div>
       </div>
-      <button class="logout-btn" onclick="logoutMusteri()">Çıkış Yap</button>
+      <div style="display:flex;gap:0.4rem;flex-wrap:wrap;">
+        <button class="logout-btn" onclick="toggleProfil()" id="profilToggleBtn">⚙️ Profil</button>
+        <button class="logout-btn" onclick="logoutMusteri()">Çıkış Yap</button>
+      </div>
     </div>
+
+    <!-- PROFİL / ŞİFRE DÜZENLE -->
+    <div class="profil-bolum" id="profilSection" style="display:none;">
+      <div class="profil-box">
+        <h3>👤 Profil Düzenle</h3>
+        <div class="profil-form">
+          <input type="text" id="editAd" placeholder="Ad Soyad" autocomplete="name">
+          <input type="tel" id="editTelefon" placeholder="Telefon" autocomplete="tel">
+          <div class="auth-error" id="profilError"></div>
+          <div class="profil-btns">
+            <button class="btn-sm primary" onclick="profilKaydet()">💾 Kaydet</button>
+            <button class="btn-sm secondary" onclick="toggleProfil()">İptal</button>
+          </div>
+        </div>
+      </div>
+      <div class="profil-box">
+        <h3>🔒 Şifre Değiştir</h3>
+        <div class="profil-form">
+          <input type="password" id="sifreYeni" placeholder="Yeni şifre (en az 6 karakter)">
+          <input type="password" id="sifreYeni2" placeholder="Yeni şifre tekrar">
+          <div class="auth-error" id="sifreError"></div>
+          <div class="profil-btns">
+            <button class="btn-sm primary" onclick="sifreDegistir()">🔒 Şifreyi Güncelle</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="resultArea"><div class="loading">Yükleniyor...</div></div>
   </div>
 </div>
@@ -242,6 +291,7 @@ auth.onAuthStateChanged(async user => {
         profil = await db.collection('musteriler').doc(user.uid).get();
       }
       const data = profil.data() || {};
+      _profilData = data;
 
       // Telefon yoksa telefon modalını aç
       if (!data.telefon) {
@@ -402,6 +452,78 @@ async function registerMusteri() {
 // ÇIKIŞ
 async function logoutMusteri() { await auth.signOut(); }
 
+// TEKLİF KABUL / REDDET
+async function teklifKabul(projeId) {
+  if (!confirm('Teklifi kabul etmek istediğinizden emin misiniz?')) return;
+  try {
+    await db.collection('projeler').doc(projeId).update({ durum: 'kabul_edildi' });
+    const user = auth.currentUser;
+    if (user) loadTalepler(user.email);
+  } catch (e) { console.error(e); alert('İşlem başarısız. Tekrar deneyin.'); }
+}
+async function teklifReddet(projeId) {
+  if (!confirm('Teklifi reddetmek istediğinizden emin misiniz?')) return;
+  try {
+    await db.collection('projeler').doc(projeId).update({ durum: 'reddedildi' });
+    const user = auth.currentUser;
+    if (user) loadTalepler(user.email);
+  } catch (e) { console.error(e); alert('İşlem başarısız. Tekrar deneyin.'); }
+}
+
+// PROFİL DÜZENLE
+let _profilData = {};
+function toggleProfil() {
+  const s = document.getElementById('profilSection');
+  const open = s.style.display === 'none';
+  s.style.display = open ? 'block' : 'none';
+  if (open) {
+    document.getElementById('editAd').value = _profilData.ad || '';
+    document.getElementById('editTelefon').value = _profilData.telefon || '';
+    document.getElementById('profilError').style.display = 'none';
+    document.getElementById('sifreError').style.display = 'none';
+    document.getElementById('sifreYeni').value = '';
+    document.getElementById('sifreYeni2').value = '';
+  }
+}
+async function profilKaydet() {
+  const ad = document.getElementById('editAd').value.trim();
+  const telefon = document.getElementById('editTelefon').value.trim();
+  const errEl = document.getElementById('profilError');
+  errEl.style.display = 'none';
+  if (!ad) { errEl.textContent = 'Ad soyad zorunludur.'; errEl.style.display = 'block'; return; }
+  const user = auth.currentUser;
+  if (!user) return;
+  try {
+    await db.collection('musteriler').doc(user.uid).set({ ad, ...(telefon && { telefon }) }, { merge: true });
+    _profilData.ad = ad;
+    if (telefon) _profilData.telefon = telefon;
+    document.getElementById('userName').textContent = ad;
+    document.getElementById('userMeta').textContent = [user.email, _profilData.telefon].filter(Boolean).join(' · ');
+    document.getElementById('profilSection').style.display = 'none';
+  } catch (e) { errEl.textContent = 'Kaydedilemedi.'; errEl.style.display = 'block'; }
+}
+async function sifreDegistir() {
+  const p1 = document.getElementById('sifreYeni').value;
+  const p2 = document.getElementById('sifreYeni2').value;
+  const errEl = document.getElementById('sifreError');
+  errEl.style.display = 'none'; errEl.style.color = '';
+  if (p1.length < 6) { errEl.textContent = 'Şifre en az 6 karakter olmalı.'; errEl.style.display = 'block'; return; }
+  if (p1 !== p2) { errEl.textContent = 'Şifreler eşleşmiyor.'; errEl.style.display = 'block'; return; }
+  try {
+    await auth.currentUser.updatePassword(p1);
+    document.getElementById('sifreYeni').value = '';
+    document.getElementById('sifreYeni2').value = '';
+    errEl.style.color = 'var(--success)';
+    errEl.textContent = '✅ Şifre güncellendi.';
+    errEl.style.display = 'block';
+    setTimeout(() => { errEl.style.display = 'none'; errEl.style.color = ''; }, 3000);
+  } catch (e) {
+    const msgs = { 'auth/requires-recent-login': 'Bu işlem için çıkış yapıp tekrar giriş yapın.' };
+    errEl.textContent = msgs[e.code] || 'Şifre güncellenemedi.';
+    errEl.style.display = 'block';
+  }
+}
+
 // TALEPLERİ YÜKLE
 async function loadTalepler(email) {
   const area = document.getElementById('resultArea');
@@ -442,6 +564,11 @@ async function loadTalepler(email) {
             ${t.teslim_gun ? `<div class="teslim">⏱️ Tahmini teslim: ${parseInt(t.teslim_gun)} iş günü</div>` : ''}
             ${t.notlar ? `<div class="not">💬 ${esc(t.notlar)}</div>` : ''}
           </div>`).join('')}
+          ${p.durum === 'teklif_verildi' ? `
+            <div class="karar-btns">
+              <button class="btn-kabul" onclick="teklifKabul('${doc.id}')">✅ Kabul Et</button>
+              <button class="btn-reddet" onclick="teklifReddet('${doc.id}')">❌ Reddet</button>
+            </div>` : ''}
         ` : p.durum === 'yeni' || p.durum === 'inceleniyor' ? `
           <div style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-muted);">⏳ Teklifiniz hazırlanıyor, 48 saat içinde bilgilendirileceksiniz.</div>
         ` : p.durum === 'kabul_edildi' ? `

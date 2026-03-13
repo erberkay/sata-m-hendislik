@@ -3,6 +3,22 @@ let currentFilter = '';
 let currentProjeId = null;
 let allProjeler = [];
 let unsubscribeDashboard = null;
+let aramaMetni = '';
+
+function filteredBySearch(list) {
+  if (!aramaMetni) return list;
+  return list.filter(p =>
+    (p.baslik || '').toLowerCase().includes(aramaMetni) ||
+    (p.musteri_ad || '').toLowerCase().includes(aramaMetni) ||
+    (p.musteri_email || '').toLowerCase().includes(aramaMetni)
+  );
+}
+function araFiltrele(val) {
+  aramaMetni = val.toLowerCase().trim();
+  updateDashboardUI();
+  const projPage = document.getElementById('page-projeler');
+  if (projPage && projPage.style.display !== 'none') loadProjeler(currentFilter);
+}
 
 // ===== TOAST =====
 function toast(type, msg) {
@@ -152,7 +168,7 @@ function updateDashboardUI() {
   badge.style.display = yeni > 0 ? 'inline-block' : 'none';
 
   const filtered = dashCurrentFilter ? allProjeler.filter(p => p.durum === dashCurrentFilter) : allProjeler;
-  document.getElementById('dashboardTableBody').innerHTML = renderTable(filtered);
+  document.getElementById('dashboardTableBody').innerHTML = renderTable(filteredBySearch(filtered));
 }
 
 function dashFilter(event, filter) {
@@ -241,7 +257,7 @@ async function saveIletisim() {
 // ===== PROJELER =====
 function loadProjeler(filter) {
   const filtered = filter ? allProjeler.filter(p => p.durum === filter) : allProjeler;
-  document.getElementById('projelerTableBody').innerHTML = renderTable(filtered);
+  document.getElementById('projelerTableBody').innerHTML = renderTable(filteredBySearch(filtered));
 }
 
 const filterLabels = { '': 'Tüm Talepler', 'yeni': 'Yeni Talepler', 'inceleniyor': 'İnceleniyor', 'teklif_verildi': 'Teklif Verilenler', 'kabul_edildi': 'Kabul Edilenler', 'reddedildi': 'Reddedilenler', 'tamamlandi': 'Tamamlananlar' };
@@ -353,12 +369,19 @@ async function openProje(id) {
       <div class="section-title-sm">📋 Önceki Teklifler</div>
       <div class="teklif-gecmis">
         ${teklifler.map(t => `
-          <div class="teklif-item">
+          <div class="teklif-item" style="position:relative;">
+            <button onclick="teklifSil('${id}','${t.id}')" title="Teklifi sil" style="position:absolute;top:0.4rem;right:0;background:transparent;border:none;color:var(--danger);font-size:0.78rem;cursor:pointer;opacity:0.65;padding:4px 6px;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.65">🗑️ Sil</button>
             <div class="fiyat">${Number(t.fiyat).toLocaleString('tr-TR')} ${esc(t.para_birimi || 'TRY')}</div>
             <div class="meta">${t.teslim_gun ? `Teslim: ${parseInt(t.teslim_gun)} gün —` : ''} ${formatDate(t.olusturma)} ${t.dosya && String(t.dosya).startsWith('https://') ? `— <a href="${esc(t.dosya)}" target="_blank" rel="noopener" style="color:var(--accent);">Dosya</a>` : ''}</div>
             ${t.notlar ? `<div style="margin-top:0.5rem;font-size:0.82rem;color:var(--text-muted);">${esc(t.notlar)}</div>` : ''}
           </div>`).join('')}
       </div>` : ''}
+    <div class="detail-divider"></div>
+    <div class="section-title-sm">📝 İç Not <span style="font-weight:400;font-size:0.72rem;color:var(--text-dim);">(müşteri görmez)</span></div>
+    <div>
+      <textarea id="adminNotTextarea" placeholder="Bu proje hakkında iç notunuz..." style="width:100%;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;padding:0.7rem 0.85rem;color:var(--text);font-family:inherit;font-size:0.875rem;resize:vertical;min-height:72px;outline:none;box-sizing:border-box;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">${esc(proje.admin_notu || '')}</textarea>
+      <button onclick="adminNotKaydet()" class="action-btn" style="margin-top:0.4rem;">💾 Notu Kaydet</button>
+    </div>
     <div class="detail-divider"></div>
     <div class="section-title-sm">💰 Teklif Ver</div>
     <div class="teklif-form">
@@ -410,6 +433,27 @@ async function teklifGonder(projeId) {
     btn.disabled = false;
     btn.innerHTML = '💰 Teklifi Kaydet';
   }
+}
+
+// ===== TEKLİF SİL =====
+async function teklifSil(projeId, teklifId) {
+  if (!confirm('Bu teklif silinsin mi?')) return;
+  try {
+    await db.collection('projeler').doc(projeId).collection('teklifler').doc(teklifId).delete();
+    toast('success', 'Teklif silindi');
+    openProje(projeId);
+  } catch (e) { console.error(e); toast('error', 'Silinemedi'); }
+}
+
+// ===== ADMİN NOTU =====
+async function adminNotKaydet() {
+  const not = document.getElementById('adminNotTextarea').value;
+  try {
+    await db.collection('projeler').doc(currentProjeId).update({ admin_notu: not });
+    toast('success', 'Not kaydedildi');
+    const p = allProjeler.find(x => x.id === currentProjeId);
+    if (p) p.admin_notu = not;
+  } catch (e) { console.error(e); toast('error', 'Not kaydedilemedi'); }
 }
 
 // ===== MODAL =====

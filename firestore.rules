@@ -18,9 +18,14 @@ service cloud.firestore {
       // Admin tümünü, müşteri yalnızca kendi projesini okuyabilir
       allow read: if isAdmin()
         || (request.auth != null && resource.data.musteri_email == request.auth.token.email);
-      // Admin tümünü güncelleyebilir, müşteri yalnızca kendi projesini
-      allow update, delete: if isAdmin()
-        || (request.auth != null && resource.data.musteri_email == request.auth.token.email);
+      // Admin her şeyi güncelleyebilir; müşteri yalnızca teklife kabul/red verebilir
+      allow update: if isAdmin()
+        || (request.auth != null
+            && resource.data.musteri_email == request.auth.token.email
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['durum'])
+            && resource.data.durum == 'teklif_verildi'
+            && request.resource.data.durum in ['kabul_edildi', 'reddedildi']);
+      allow delete: if isAdmin();
 
       // Teklifler (sub-collection)
       match /teklifler/{teklifId} {
@@ -51,7 +56,7 @@ service cloud.firestore {
 
     // İlk kurulum bootstrap: config yoksa giriş yapan kişi oluşturabilir
     match /ayarlar/config {
-      allow read: if true;
+      allow read: if request.auth != null;
       allow write: if isAdmin()
         || !exists(/databases/$(database)/documents/ayarlar/config);
     }

@@ -223,6 +223,7 @@
         <h1 id="pageTitle">Dashboard</h1>
       </div>
       <div class="topbar-right">
+        <input type="search" id="searchInput" placeholder="🔍 Proje veya müşteri ara..." oninput="araFiltrele(this.value)" style="background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;padding:0.45rem 0.75rem;color:var(--text);font-family:inherit;font-size:0.85rem;width:200px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
         <a href="index.html" target="_blank" class="topbar-btn">🌐 Siteyi Gör</a>
         <button class="topbar-btn" onclick="refreshData()">🔄 Yenile</button>
       </div>

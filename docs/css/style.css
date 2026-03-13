@@ -448,6 +448,23 @@ section { padding: 6rem 2rem; }
   font-size: 0.7rem;
 }
 
+.hizmet-teklif-link {
+  display: inline-block;
+  margin-top: 1.1rem;
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid rgba(249,115,22,0.3);
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+.hizmet-teklif-link:hover {
+  background: rgba(249,115,22,0.08);
+  border-color: var(--accent);
+}
+
 /* ========== NASIL ÇALIŞIR ========== */
 .steps-grid {
   display: grid;

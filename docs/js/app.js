@@ -90,6 +90,13 @@ if (teklifForm) {
   });
 }
 
+function kategoriSec(kategori) {
+  setTimeout(() => {
+    const sel = document.querySelector('[name="kategori"]');
+    if (sel) sel.value = kategori;
+  }, 400);
+}
+
 function resetForm() {
   if (teklifForm) { teklifForm.reset(); teklifForm.style.display = 'block'; }
   if (formSuccess) formSuccess.style.display = 'none';
