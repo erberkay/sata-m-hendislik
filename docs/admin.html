@@ -28,7 +28,7 @@
     .login-logo{font-size:2.5rem;margin-bottom:1rem;}
     .login-box h1{font-size:1.4rem;font-weight:700;margin-bottom:0.25rem;}
     .login-box p{color:var(--text-muted);font-size:0.875rem;margin-bottom:2rem;}
-    .login-box input{width:100%;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;padding:0.85rem 1rem;color:var(--text);font-size:0.95rem;margin-bottom:0.75rem;font-family:inherit;transition:border-color 0.2s;}
+    .login-box input{width:100%;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;padding:0.85rem 1rem;color:var(--text);font-size:1rem;min-height:48px;margin-bottom:0.75rem;font-family:inherit;transition:border-color 0.2s;}
     .login-box input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
     .login-btn{width:100%;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0.9rem;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.2s;margin-top:0.5rem;}
     .login-btn:hover{background:var(--accent-dark);}
@@ -268,22 +268,22 @@
           <div style="padding:1.5rem;display:flex;flex-direction:column;gap:1.1rem;">
             <div>
               <label style="display:block;font-size:0.8rem;font-weight:600;color:var(--text-muted);margin-bottom:0.4rem;">📞 Telefon</label>
-              <input id="ib-telefon" type="tel" placeholder="+90 (5xx) xxx xx xx" style="width:100%;padding:0.7rem 0.9rem;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.9rem;box-sizing:border-box;">
+              <input id="ib-telefon" type="tel" placeholder="+90 (5xx) xxx xx xx" style="width:100%;padding:0.7rem 0.9rem;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:1rem;min-height:48px;box-sizing:border-box;">
             </div>
             <div>
               <label style="display:block;font-size:0.8rem;font-weight:600;color:var(--text-muted);margin-bottom:0.4rem;">✉️ E-posta</label>
-              <input id="ib-email" type="email" placeholder="info@satamuhendislik.com" style="width:100%;padding:0.7rem 0.9rem;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.9rem;box-sizing:border-box;">
+              <input id="ib-email" type="email" placeholder="info@satamuhendislik.com" style="width:100%;padding:0.7rem 0.9rem;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:1rem;min-height:48px;box-sizing:border-box;">
             </div>
             <div>
               <label style="display:block;font-size:0.8rem;font-weight:600;color:var(--text-muted);margin-bottom:0.4rem;">📍 Adres</label>
-              <input id="ib-adres" type="text" placeholder="İstanbul, Türkiye" style="width:100%;padding:0.7rem 0.9rem;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.9rem;box-sizing:border-box;">
+              <input id="ib-adres" type="text" placeholder="İstanbul, Türkiye" style="width:100%;padding:0.7rem 0.9rem;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:1rem;min-height:48px;box-sizing:border-box;">
             </div>
             <div>
               <label style="display:block;font-size:0.8rem;font-weight:600;color:var(--text-muted);margin-bottom:0.4rem;">🕒 Çalışma Saatleri</label>
-              <input id="ib-saat" type="text" placeholder="Hafta içi: 08:00 - 18:00" style="width:100%;padding:0.7rem 0.9rem;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:0.9rem;box-sizing:border-box;">
+              <input id="ib-saat" type="text" placeholder="Hafta içi: 08:00 - 18:00" style="width:100%;padding:0.7rem 0.9rem;background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:1rem;min-height:48px;box-sizing:border-box;">
             </div>
             <div style="display:flex;gap:0.75rem;align-items:center;">
-              <button id="iletisimSaveBtn" onclick="saveIletisim()" style="padding:0.7rem 1.5rem;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:0.9rem;font-weight:600;cursor:pointer;">💾 Kaydet</button>
+              <button id="iletisimSaveBtn" onclick="saveIletisim()" style="padding:0.7rem 1.5rem;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:1rem;font-weight:600;cursor:pointer;min-height:48px;">💾 Kaydet</button>
               <span id="iletisimMsg" style="font-size:0.85rem;display:none;"></span>
             </div>
           </div>

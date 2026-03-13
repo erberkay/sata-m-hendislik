@@ -46,6 +46,8 @@ auth.onAuthStateChanged(async user => {
     if (unsubscribeDashboard) { unsubscribeDashboard(); unsubscribeDashboard = null; }
     document.getElementById('loginScreen').style.display = 'flex';
     document.getElementById('adminApp').style.display = 'none';
+    const btn = document.querySelector('#loginScreen .login-btn');
+    if (btn) { btn.disabled = false; btn.textContent = 'Giriş Yap'; }
   }
 });
 
