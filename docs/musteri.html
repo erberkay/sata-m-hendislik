@@ -258,8 +258,10 @@ auth.onAuthStateChanged(async user => {
       loadTalepler(user.email);
     } catch (e) {
       console.error('Auth state error:', e);
-      // Giriş başarısız — çıkış yap
       await auth.signOut();
+      // onAuthStateChanged(null) else branch göstermeden önce hata mesajı hazırla
+      const errEl = document.getElementById('loginError');
+      if (errEl) { errEl.textContent = 'Profil yüklenemedi. Lütfen tekrar giriş yapın.'; errEl.style.display = 'block'; }
     }
   } else {
     document.getElementById('authSection').style.display = 'block';

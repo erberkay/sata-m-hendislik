@@ -96,6 +96,8 @@ function showPage(page, filter) {
   if (page === 'projeler') {
     currentFilter = filter || '';
     loadProjeler(currentFilter);
+    const titleEl = document.getElementById('tableTitle');
+    if (titleEl) titleEl.textContent = filterLabels[currentFilter] || 'Talepler';
     document.querySelectorAll('#filterBtns .filter-btn').forEach(b => b.classList.remove('active'));
     const activeBtn = [...document.querySelectorAll('#filterBtns .filter-btn')].find(b => {
       const onclick = b.getAttribute('onclick') || '';
@@ -242,10 +244,14 @@ function loadProjeler(filter) {
   document.getElementById('projelerTableBody').innerHTML = renderTable(filtered);
 }
 
+const filterLabels = { '': 'Tüm Talepler', 'yeni': 'Yeni Talepler', 'inceleniyor': 'İnceleniyor', 'teklif_verildi': 'Teklif Verilenler', 'kabul_edildi': 'Kabul Edilenler', 'reddedildi': 'Reddedilenler', 'tamamlandi': 'Tamamlananlar' };
+
 function filterProjeler(event, filter) {
   currentFilter = filter;
   document.querySelectorAll('#filterBtns .filter-btn').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
+  const titleEl = document.getElementById('tableTitle');
+  if (titleEl) titleEl.textContent = filterLabels[filter] || 'Talepler';
   loadProjeler(filter);
 }
 
