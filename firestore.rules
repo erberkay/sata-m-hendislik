@@ -43,8 +43,15 @@ service cloud.firestore {
     match /ayarlar/{docId} {
       // Herkes okuyabilir (site ziyaretçileri iletişim bilgilerini görür)
       allow read: if true;
-      // Yalnızca admin yazabilir
+      // Admin yazabilir
       allow write: if isAdmin();
+    }
+
+    // İlk kurulum bootstrap: config yoksa giriş yapan kişi oluşturabilir
+    match /ayarlar/config {
+      allow read: if true;
+      allow write: if isAdmin()
+        || !exists(/databases/$(database)/documents/ayarlar/config);
     }
   }
 }
