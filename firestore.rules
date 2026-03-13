@@ -11,8 +11,10 @@ service cloud.firestore {
 
     // Projeler (teklif talepleri)
     match /projeler/{projeId} {
-      // Herkes form gönderebilir (giriş gerekmez)
-      allow create: if true;
+      // Herkes form gönderebilir (giriş gerekmez); zorunlu alanlar kontrol edilir
+      allow create: if request.resource.data.keys().hasAll(['baslik', 'musteri_ad', 'musteri_email'])
+        && request.resource.data.baslik is string && request.resource.data.baslik.size() > 0
+        && request.resource.data.musteri_email is string && request.resource.data.musteri_email.size() > 3;
       // Admin tümünü, müşteri yalnızca kendi projesini okuyabilir
       allow read: if isAdmin()
         || (request.auth != null && resource.data.musteri_email == request.auth.token.email);

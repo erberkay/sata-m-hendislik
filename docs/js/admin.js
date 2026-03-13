@@ -181,8 +181,8 @@ async function loadMusteriler() {
             return `<tr>
               <td style="color:var(--text-muted);font-size:0.8rem;">${i + 1}</td>
               <td><div class="project-title">${esc(m.ad || '—')}</div></td>
-              <td><div class="project-sub"><a href="mailto:${m.email}" style="color:var(--accent);">${esc(m.email)}</a></div></td>
-              <td><div class="project-title"><a href="tel:${m.telefon}" style="color:var(--success);">${esc(m.telefon || '—')}</a></div></td>
+              <td><div class="project-sub"><a href="mailto:${esc(m.email)}" style="color:var(--accent);">${esc(m.email)}</a></div></td>
+              <td><div class="project-title"><a href="tel:${esc(m.telefon)}" style="color:var(--success);">${esc(m.telefon || '—')}</a></div></td>
               <td style="color:var(--text-muted);font-size:0.8rem;">${formatDate(m.olusturma)}</td>
             </tr>`;
           }).join('')}
@@ -276,8 +276,8 @@ function renderTable(projeler) {
             <td style="color:var(--text-muted);font-size:0.8rem;">${i + 1}</td>
             <td><div class="project-title">${esc(p.baslik)}</div><div class="project-sub">${esc(p.musteri_sehir || '—')}</div></td>
             <td><div class="project-title">${esc(p.musteri_ad)}</div><div class="project-sub">${esc(p.musteri_email)}</div></td>
-            <td style="font-size:0.82rem;">${kategoriLabel[p.kategori] || p.kategori || '—'}</td>
-            <td>${durumBadge[p.durum] || p.durum}</td>
+            <td style="font-size:0.82rem;">${kategoriLabel[p.kategori] || esc(p.kategori) || '—'}</td>
+            <td>${durumBadge[p.durum] || esc(p.durum)}</td>
             <td style="color:var(--text-muted);font-size:0.8rem;">${formatDate(p.olusturma)}</td>
             <td><button class="action-btn primary" onclick="openProje('${p.id}')">Detay</button></td>
           </tr>`).join('')}
@@ -302,8 +302,9 @@ async function openProje(id) {
   ].filter(Boolean).join(' × ') || '—';
 
   const dosyaLinks = (proje.dosyalar || []).map(url => {
-    const name = decodeURIComponent(url.split('/').pop().split('?')[0]).split('_').slice(1).join('_') || 'dosya';
-    return `<a href="${url}" target="_blank" class="dosya-link">📎 ${name}</a>`;
+    if (typeof url !== 'string' || !url.startsWith('https://')) return '';
+    const name = esc(decodeURIComponent(url.split('/').pop().split('?')[0]).split('_').slice(1).join('_') || 'dosya');
+    return `<a href="${esc(url)}" target="_blank" rel="noopener" class="dosya-link">📎 ${name}</a>`;
   }).join('') || '<span style="color:var(--text-dim);font-size:0.85rem;">Dosya eklenmemiş</span>';
 
   // Teklifleri çek
@@ -321,13 +322,13 @@ async function openProje(id) {
   document.getElementById('modalBody').innerHTML = `
     <div class="detail-grid">
       <div class="detail-item"><label>Müşteri</label><p>${esc(proje.musteri_ad)}</p></div>
-      <div class="detail-item"><label>E-posta</label><p><a href="mailto:${proje.musteri_email}" style="color:var(--accent);">${proje.musteri_email}</a></p></div>
-      <div class="detail-item"><label>Telefon</label><p>${proje.musteri_telefon || '—'}</p></div>
-      <div class="detail-item"><label>Şehir</label><p>${proje.musteri_sehir || '—'}</p></div>
-      <div class="detail-item"><label>Kategori</label><p>${kategoriLabel[proje.kategori] || proje.kategori || '—'}</p></div>
-      <div class="detail-item"><label>Bütçe</label><p>${proje.butce || '—'}</p></div>
-      <div class="detail-item"><label>Ölçüler</label><p>${olcular}</p></div>
-      <div class="detail-item"><label>Adet</label><p>${proje.adet || 1}</p></div>
+      <div class="detail-item"><label>E-posta</label><p><a href="mailto:${esc(proje.musteri_email)}" style="color:var(--accent);">${esc(proje.musteri_email)}</a></p></div>
+      <div class="detail-item"><label>Telefon</label><p>${esc(proje.musteri_telefon || '—')}</p></div>
+      <div class="detail-item"><label>Şehir</label><p>${esc(proje.musteri_sehir || '—')}</p></div>
+      <div class="detail-item"><label>Kategori</label><p>${kategoriLabel[proje.kategori] || esc(proje.kategori) || '—'}</p></div>
+      <div class="detail-item"><label>Bütçe</label><p>${esc(proje.butce || '—')}</p></div>
+      <div class="detail-item"><label>Ölçüler</label><p>${esc(olcular)}</p></div>
+      <div class="detail-item"><label>Adet</label><p>${esc(String(proje.adet || 1))}</p></div>
     </div>
     ${proje.aciklama ? `<div class="detail-divider"></div><div class="detail-item"><label>Açıklama</label><p style="color:var(--text-muted);line-height:1.7;">${esc(proje.aciklama)}</p></div>` : ''}
     <div class="detail-divider"></div>
@@ -347,8 +348,8 @@ async function openProje(id) {
       <div class="teklif-gecmis">
         ${teklifler.map(t => `
           <div class="teklif-item">
-            <div class="fiyat">${Number(t.fiyat).toLocaleString('tr-TR')} ${t.para_birimi || 'TRY'}</div>
-            <div class="meta">${t.teslim_gun ? `Teslim: ${t.teslim_gun} gün —` : ''} ${formatDate(t.olusturma)} ${t.dosya ? `— <a href="${t.dosya}" target="_blank" style="color:var(--accent);">Dosya</a>` : ''}</div>
+            <div class="fiyat">${Number(t.fiyat).toLocaleString('tr-TR')} ${esc(t.para_birimi || 'TRY')}</div>
+            <div class="meta">${t.teslim_gun ? `Teslim: ${parseInt(t.teslim_gun)} gün —` : ''} ${formatDate(t.olusturma)} ${t.dosya && String(t.dosya).startsWith('https://') ? `— <a href="${esc(t.dosya)}" target="_blank" rel="noopener" style="color:var(--accent);">Dosya</a>` : ''}</div>
             ${t.notlar ? `<div style="margin-top:0.5rem;font-size:0.82rem;color:var(--text-muted);">${esc(t.notlar)}</div>` : ''}
           </div>`).join('')}
       </div>` : ''}
